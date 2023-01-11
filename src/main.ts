@@ -8,8 +8,7 @@ import { ElNotification } from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import moment from 'moment'; 
 import 'moment/locale/zh-cn'
-moment.locale('zh-cn'); 
-// console.log(moment(1673320744298).format('YYYY-MM-DD'));
+// import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
 const app = createApp(App)
 

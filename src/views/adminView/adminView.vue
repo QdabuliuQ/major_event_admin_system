@@ -3,7 +3,7 @@
     <div class="topNav">大事件后台管理系统</div>
     <div class="bottomContainer">
       <div class="leftMenu">
-        <el-menu default-active="2">
+        <el-menu :default-active="activeIndex">
           <el-sub-menu v-for="item in menuList" :index="item.index">
             <template #title>
               <span>{{ item.name }}</span>
@@ -22,7 +22,7 @@
       </div>
       <div class="rightRouterView">
         <div class="routerContainer">
-          <div style='padding: 20px'>
+          <div style="padding: 20px">
             <router-view></router-view>
           </div>
         </div>
@@ -40,40 +40,10 @@ export default defineComponent({
   name: "adminView",
   setup() {
     const router = useRouter()
-    const data: InitData = reactive({
-      menuList: [
-        {
-          name: "用户信息",
-          index: "1",
-          icon: "user",
-          list: [
-            {
-              name: "普通用户",
-              index: "1-1",
-              path: "/client",
-            },
-            {
-              name: "普通管理员",
-              index: "1-2",
-              path: "/administrator",
-            },
-          ],
-        },
-        {
-          name: "文章管理",
-          index: "2",
-          icon: "user",
-          list: [
-            {
-              name: "所有文章",
-              index: "2-1",
-              path: "/article",
-            },
-          ],
-        },
-      ],
+    const data: InitData = reactive(new InitData());
+    onMounted(() => {
+      data.activeIndex = router.currentRoute.value.meta.index as string;
     });
-    onMounted(() => {});
     return {
       router,
       ...toRefs(data),
