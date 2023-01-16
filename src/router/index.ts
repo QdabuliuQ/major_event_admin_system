@@ -5,6 +5,12 @@ const clientView = () => import(/* webpackChunkName:"loginView" */ '@/views/clie
 const managerView = () => import(/* webpackChunkName:"loginView" */ '@/views/managerView/managerView.vue')
 const supAdminLog = () => import(/* webpackChunkName:"loginView" */ '@/views/logView/supAdminLog.vue')
 const adminLog = () => import(/* webpackChunkName:"loginView" */ '@/views/logView/adminLog.vue')
+const backNotice = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/backNotice.vue')
+const receNotice = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/receNotice.vue')
+const backNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/backNoticeInfo.vue')
+const receNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/receNoticeInfo.vue')
+const articleCate = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleCate.vue')
+const articleList = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleList.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -38,6 +44,22 @@ const routes: Array<RouteRecordRaw> = [
         component: managerView
       },
       {
+        path: '/articleCate',
+        name: 'articleCate',
+        meta: {
+          index: '2-1'
+        },
+        component: articleCate
+      },
+      {
+        path: '/articleList',
+        name: 'articleList',
+        meta: {
+          index: '2-2'
+        },
+        component: articleList
+      },
+      {
         path: '/supAdminLog',
         name: 'supAdminLog',
         meta: {
@@ -52,6 +74,54 @@ const routes: Array<RouteRecordRaw> = [
           index: '3-2'
         },
         component: adminLog
+      },
+      {
+        path: '/backNotice',
+        name: 'backNotice',
+        meta: {
+          index: '4-1'
+        },
+        component: backNotice
+      },
+      {
+        path: '/addBackNotice',
+        name: 'addBackNotice',
+        meta: {
+          index: '4-1'
+        },
+        component: backNoticeInfo
+      },
+      {
+        path: '/updateBackNotice',
+        name: 'updateBackNotice',
+        meta: {
+          index: '4-1'
+        },
+        component: backNoticeInfo
+      },
+      {
+        path: '/receNotice',
+        name: 'receNotice',
+        meta: {
+          index: '4-2'
+        },
+        component: receNotice
+      },
+      {
+        path: '/addReceNotice',
+        name: 'addReceNotice',
+        meta: {
+          index: '4-2'
+        },
+        component: receNoticeInfo
+      },
+      {
+        path: '/updateReceNotice',
+        name: 'updateReceNotice',
+        meta: {
+          index: '4-2'
+        },
+        component: receNoticeInfo
       },
     ]
   },

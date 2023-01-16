@@ -47,7 +47,6 @@
         :rules="rules"
         :label-width="80"
         :model="tmpData"
-        label-width="120px"
       >
         <el-form-item label="账号ID">
           <el-input disabled v-model="tmpData.id" />
@@ -186,7 +185,7 @@ export default defineComponent({
       }
     };
 
-    const edieInfo = (index: number, type: string) => {
+    const edieInfo = (index: number, type?: string) => {
       data.userData[index].status = data.userData[index].status.toString()
       data.tmpData = { ...data.userData[index] };
       

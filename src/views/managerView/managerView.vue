@@ -8,7 +8,6 @@
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="time" label="创建时间" width="180">
         <template #default="scope">
-          
           {{ scope.row.time ? proxy.$moment(scope.row.time).format('YYYY-MM-DD HH:mm') : ''}}
         </template>
       </el-table-column>
@@ -51,7 +50,6 @@
         :rules="rules"
         :label-width="80"
         :model="tmpData"
-        label-width="120px"
       >
         <el-form-item label="账号ID">
           <el-input disabled v-model="tmpData.admin_id" />
@@ -77,7 +75,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
+          <el-button @click="updateVisible = false">取消</el-button>
           <el-button type="primary" @click="updateInfo"> 提交 </el-button>
         </span>
       </template>
@@ -114,7 +112,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
+          <el-button @click="addVisible = false">取消</el-button>
           <el-button type="primary" @click="submitAdminInfo">添加</el-button>
         </span>
       </template>
@@ -256,7 +254,7 @@ export default defineComponent({
       }
     };
 
-    const editInfo = (i: number, type: string) => {
+    const editInfo = (i: number, type?: string) => {
       data.adminData[i].rootPwd = ''
       data.tmpData = {...data.adminData[i]};
 

@@ -33,9 +33,14 @@ export class InitData {
       icon: "user",
       list: [
         {
-          name: "所有文章",
+          name: "文章分类",
           index: "2-1",
-          path: "/article",
+          path: "/articleCate",
+        },
+        {
+          name: "所有文章",
+          index: "2-2",
+          path: "/articleList",
         },
       ],
     },
@@ -56,5 +61,22 @@ export class InitData {
         },
       ],
     },
-  ],
+    {
+      name: "公告管理",
+      index: "4",
+      icon: "user",
+      list: [
+        {
+          name: "后台公告",
+          index: "4-1",
+          path: "/BackNotice",
+        },
+        {
+          name: "前台公告",
+          index: "4-2",
+          path: "/ReceNotice",
+        },
+      ],
+    },
+  ]
 }

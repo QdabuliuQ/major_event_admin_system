@@ -1,5 +1,5 @@
 <template>
-  <div id="toolBar">
+  <div id="toolBar_log">
     <div class="pickContainer">
       <el-date-picker
         @change='pickerChange'
@@ -68,7 +68,7 @@ export default defineComponent({
 </script>
 
 <style lang='less'>
-#toolBar {
+#toolBar_log {
   display: flex;
   align-items: center;
   margin-bottom: 20px;

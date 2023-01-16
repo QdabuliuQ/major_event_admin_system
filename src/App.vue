@@ -32,4 +32,15 @@ export default defineComponent({
   align-items: center;
   justify-content: center;
 }
+.adminInfoContainer {
+  .infoItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    .rightInfo {
+      font-weight: bold;
+    }
+  }
+}
 </style>
