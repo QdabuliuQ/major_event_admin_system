@@ -81,7 +81,7 @@ export class InitData {
       },
       {
         pattern: /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/,    //正则校验不用字符串
-        message: '输入格式账号错误',
+        message: '输入邮箱格式错误',
         trigger: 'blur'
       }
     ],

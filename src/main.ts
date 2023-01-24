@@ -33,7 +33,6 @@ app.config.globalProperties.$fileType = function (fileName: any) {  // 判断文
   const imgList = ['png', 'jpg', 'jpeg', 'gif']; // 图片格式
   result = imgList.find(item => item === suffix);
   if (result) return 'image';
-  // 匹配音频
 }
 
 app.use(ElementPlus).use(store).use(router).mount('#app')

@@ -51,6 +51,42 @@ export function updateCateStatus(data: {
   is_delete: number
 }) {
   return $http({
-    url: `/art/upDateCateStatus/${data.id}/${data.is_delete}`,
+    url: `/art/updateCateStatus/${data.id}/${data.is_delete}`,
+  })
+}
+
+// 获取分类标签
+export function getCategoryTarget(data: {
+  id: string
+  limit: number
+  offset: number
+}) {
+  return $http({
+    url: `/art/getCateTarget/${data.id}/${data.limit}/${data.offset}`,
+    method: 'get'
+  })
+} 
+
+// 添加分类标签
+export function addCategoryTarget(data: {
+  name: string
+  cate_id: string
+}) {
+  return $http({
+    url: '/art/addCateTarget',
+    method: 'post',
+    data
+  })
+}
+
+// 删除分类标签
+export function deleteCategoryTarget(data: {
+  id: string
+  cate_id: string
+}) {
+  return $http({
+    url: '/art/deleteCateTarget',
+    method: 'post',
+    data
   })
 }

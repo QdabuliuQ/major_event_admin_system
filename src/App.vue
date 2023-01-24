@@ -23,8 +23,34 @@ export default defineComponent({
   margin: 0;
   padding: 0;
 }
+img {
+  user-select: none;
+}
 :root {
   --el-font-size-base: 13px !important;
+}
+.el-button--small {
+  padding: 15px 11px !important;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
 }
 .paginationContainer {
   margin: 30px 0 15px;

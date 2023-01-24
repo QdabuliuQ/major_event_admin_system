@@ -3,22 +3,19 @@
     <div class="topNav">大事件后台管理系统</div>
     <div class="bottomContainer">
       <div class="leftMenu">
-        <el-menu :default-active="activeIndex">
-          <el-sub-menu v-for="item in menuList" :index="item.index">
-            <template #title>
-              <span>{{ item.name }}</span>
-            </template>
-            <el-menu-item-group>
-              <el-menu-item
-                @click="router.push(menu.path)"
-                v-for="menu in item.list"
-                :key="menu.index"
-                :index="menu.index"
-                >{{ menu.name }}</el-menu-item
-              >
-            </el-menu-item-group>
-          </el-sub-menu>
-        </el-menu>
+        <el-scrollbar class="menuScrollContainer" :height="height +'px'">
+          <el-menu :default-active="activeIndex">
+            <el-sub-menu v-for="item in menuList" :index="item.index">
+              <template #title>
+                <span>{{ item.name }}</span>
+              </template>
+              <el-menu-item-group>
+                <el-menu-item @click="router.push(menu.path)" v-for="menu in item.list" :key="menu.index"
+                  :index="menu.index">{{ menu.name }}</el-menu-item>
+              </el-menu-item-group>
+            </el-sub-menu>
+          </el-menu>
+        </el-scrollbar>
       </div>
       <div class="rightRouterView">
         <div class="routerContainer">
@@ -32,18 +29,35 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, onMounted, toRefs } from "vue";
+import { defineComponent, reactive, onMounted, onUnmounted, toRefs } from "vue";
 import { InitData } from "@/types/adminView/adminView";
 import { useRouter } from "vue-router";
+
+let timer: any = null;
 
 export default defineComponent({
   name: "adminView",
   setup() {
     const router = useRouter()
     const data: InitData = reactive(new InitData());
+
+    const resizeEvent = () => {
+      if(timer) clearTimeout(timer)
+      timer = setTimeout(() => {
+        data.height = document.documentElement.clientHeight - document.getElementsByClassName('topNav')[0].clientHeight
+      }, 200);
+    }
+
     onMounted(() => {
       data.activeIndex = router.currentRoute.value.meta.index as string;
+      data.height = document.documentElement.clientHeight - document.getElementsByClassName('topNav')[0].clientHeight
+      window.addEventListener('resize', resizeEvent)
     });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', resizeEvent)
+    })
+
     return {
       router,
       ...toRefs(data),
@@ -70,10 +84,15 @@ export default defineComponent({
     left: 0;
     right: 0;
   }
+
   .bottomContainer {
     display: flex;
     justify-content: flex-end;
     margin-top: 55px;
+    .menuScrollContainer {
+      background-color: #393939;
+    }
+
     .leftMenu {
       width: 200px;
       height: 100%;
@@ -81,22 +100,28 @@ export default defineComponent({
       z-index: 2;
       left: 0;
       top: 55px;
+
       .el-menu {
         height: 100%;
         background-color: #393939;
+
         .el-sub-menu__title {
           color: #fff !important;
+
           &:hover {
             background-color: #4d4d4d;
           }
         }
+
         .el-menu-item-group {
           .el-menu-item {
             color: #fff !important;
+
             &:hover {
               background-color: #4d4d4d;
             }
           }
+
           .is-active {
             color: #499afc !important;
             background-color: #4d4d4d;
@@ -105,9 +130,11 @@ export default defineComponent({
         }
       }
     }
+
     .rightRouterView {
 
       width: calc(100% - 200px);
+
       .routerContainer {
         margin: 20px;
         box-shadow: 0 0 10px rgba(0, 0, 0, .1);

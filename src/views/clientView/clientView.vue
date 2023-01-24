@@ -2,7 +2,7 @@
   <div id="clientView">
     <inputSearch @searchInfo="searchInfo" @resetInfo='resetInfo' />
     <el-table :data="userData" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="110" />
+      <el-table-column prop="id" label="ID" width="130" />
       <el-table-column label="头像" width="100">
         <template #default="scope">
           <div class="tablePicContainer">
@@ -10,10 +10,11 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="username" label="姓名" width="180" />
+      <!-- <el-table-column prop="username" label="姓名" width="180" /> -->
       <el-table-column prop="nickname" label="昵称" />
       <el-table-column prop="email" label="邮箱" />
-      <el-table-column label="账号状态">
+      <el-table-column prop="phone" label="手机号" />
+      <el-table-column label="账号状态" width="90">
         <template #default="scope">
           <el-tag v-if="scope.row.status == 1" type="success">正常</el-tag>
           <el-tag v-else-if="scope.row.status == 2" type="danger">封禁</el-tag>
@@ -41,7 +42,12 @@
         :total="total"
       />
     </div>
-    <el-dialog v-model="visible" :top="'10vh'" title="编辑用户信息" width="40%">
+    <scrollDialog 
+      title="编辑用户信息" 
+      :height="400"
+      @confirm="updateInfo" 
+      :visible="visible"
+      @update:modelValue="visible = $event">
       <el-form
         ref="infoFromRef"
         :rules="rules"
@@ -52,7 +58,10 @@
           <el-input disabled v-model="tmpData.id" />
         </el-form-item>
         <el-form-item label="账号头像">
-          <div @click="inputUploadRef.click()" class="avatarContainer">
+          <div @click="() => {
+            inputUploadRef.click()
+            uploadType = 'avatar'
+          }" class="avatarContainer">
             <img v-if="tmpData.user_pic" :src="tmpData.user_pic" alt="" />
             <div v-else class="noAvatar">
               <el-icon style="width: 30px; height: 30px"
@@ -67,14 +76,30 @@
             />
           </div>
         </el-form-item>
-        <el-form-item prop="username" label="用户姓名">
-          <el-input v-model="tmpData.username" />
+        <el-form-item label="背景图片">
+          <div @click="() => {
+            inputUploadRef.click()
+            uploadType = 'bg_image'
+          }" class="avatarContainer">
+            <img v-if="tmpData.bg_image" :src="tmpData.bg_image" alt="" />
+            <div v-else class="noAvatar">
+              <el-icon style="width: 30px; height: 30px"
+                ><Plus style="font-size: 30px"
+              /></el-icon>
+            </div>
+          </div>
         </el-form-item>
-        <el-form-item label="账号昵称">
+        <el-form-item prop="nickname" label="账号昵称">
           <el-input v-model="tmpData.nickname" />
         </el-form-item>
         <el-form-item prop="email" label="账号邮箱">
           <el-input v-model="tmpData.email" />
+        </el-form-item>
+        <el-form-item prop="phone" label="手机号">
+          <el-input v-model="tmpData.phone" />
+        </el-form-item>
+        <el-form-item label="简介">
+          <el-input v-model="tmpData.intro" />
         </el-form-item>
         <el-form-item label="账号状态">
           <el-select v-model="tmpData.status">
@@ -84,13 +109,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="updateInfo"> 提交 </el-button>
-        </span>
-      </template>
-    </el-dialog>
+    </scrollDialog>
     <el-dialog
       :top="'10vh'"
       v-model="visiblePwdDia"
@@ -135,6 +154,7 @@ import {
 } from "vue";
 import axios from "axios";
 import type { FormInstance } from "element-plus";
+import scrollDialog from "@/components/scrollDialog.vue";
 import {
   getUserList,
   updateUserInfo,
@@ -147,6 +167,7 @@ export default defineComponent({
   name: "clientView",
   components: {
     inputSearch,
+    scrollDialog,
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
@@ -200,9 +221,9 @@ export default defineComponent({
     const updateAvatar = () => {
       if (proxy.$fileType(inputUploadRef.value.files[0].name) == "image") {
         let formData = new FormData();
-        formData.append("avatar", inputUploadRef.value.files[0]);
+        formData.append(data.uploadType, inputUploadRef.value.files[0]);
         axios
-          .post(proxy.$url + "/upload/avatar", formData, {
+          .post(proxy.$url + (data.uploadType == 'avatar' ? "/upload/avatar" : "/upload/userBgimage"), formData, {
             headers: {
               Authorization: localStorage.getItem("token"),
               "Content-Type": "multipart/form-data",
@@ -215,7 +236,11 @@ export default defineComponent({
                 message: "上传图片成功",
                 type: "success",
               });
-              data.tmpData.user_pic = res.data.url;
+              if(data.uploadType == 'avatar') {
+                data.tmpData.user_pic = res.data.url;
+              } else {
+                data.tmpData.bg_image = res.data.url;
+              }
             } else {
               proxy.$msg({
                 title: "错误",
@@ -224,6 +249,7 @@ export default defineComponent({
               });
             }
           });
+          
       } else {
         proxy.$msg({
           title: "错误",
@@ -231,6 +257,7 @@ export default defineComponent({
           type: "error",
         });
       }
+      inputUploadRef.value.value = null
     };
 
     // 更新用户信息
@@ -239,11 +266,12 @@ export default defineComponent({
         if (vaild) {
           updateUserInfo({
             id: data.tmpData.id,
-            username: data.tmpData.username,
             nickname: data.tmpData.nickname,
+            phone: data.tmpData.phone,
             email: data.tmpData.email,
             status: parseInt(data.tmpData.status),
             user_pic: data.tmpData.user_pic,
+            bg_image: data.tmpData.bg_image
           }).then((res: any) => {
             if (!res.data.status) {
               proxy.$msg({
@@ -260,6 +288,7 @@ export default defineComponent({
                 type: "error",
               });
             }
+            
           });
         } else {
           proxy.$msg({

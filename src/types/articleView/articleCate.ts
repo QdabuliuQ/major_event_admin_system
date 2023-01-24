@@ -64,4 +64,18 @@ export class InitData {
     desc: '',
     password: ''
   }
+  cate_id: string = ''
+  drawer: boolean = false
+
+  targetLimit: number = 70
+  targetOffset: number = 1
+  targetList: {
+    id: string
+    cate_id: string
+    name: string
+    time: any
+  }[] = []
+
+  targetInput: string = ''
+  noMore: boolean = false
 }

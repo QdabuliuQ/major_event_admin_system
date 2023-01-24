@@ -1,6 +1,8 @@
 // import type { FormRules } from 'element-plus'
 
 export class InitData {
+  uploadType: string = ''
+
   userData: {
     id: number | string,
     username: string,
@@ -21,6 +23,7 @@ export class InitData {
     email: string
     user_pic: string
     status: number | string
+    intro: string
     _status: string
   } | any = {
       id: '',
@@ -29,13 +32,14 @@ export class InitData {
       email: '',
       user_pic: '',
       status: 0,
-      _status: ''
+      _status: '',
+      intro: ''
     }
   total: number = 0
   pageSize: any = 0
   offset: any = 1
   rules: any = {
-    username: [
+    nickname: [
       { 
         required: true, 
         message: '用户姓名不能为空',
@@ -53,7 +57,19 @@ export class InitData {
         message: '输入格式账号错误',
         trigger: 'blur'
       }
-    ]
+    ],
+    phone: [
+      { 
+        required: true, 
+        message: '手机号不能为空',
+        trigger: 'blur' 
+      },
+      {
+        pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
+        message: '手机号不合法',
+        trigger: 'blur'
+      }
+    ],
   }
 
   rulesPwd: any = {

@@ -1,4 +1,6 @@
 export class InitData { 
+  height: number = 0
+
   activeIndex: string = ''
   menuList: {
     name: string,
