@@ -9,8 +9,8 @@
       </el-select>
       <el-date-picker style="margin-right: 30px" @change='pickerChange' v-model="time" type="datetimerange" range-separator="至"
           start-placeholder="开始时间" end-placeholder="结束时间" value-format="x" />
-      <el-button :icon="RefreshRight" @click="resetInfo">重置</el-button>
-      <el-button @click="searchInfo" :icon="Plus" type="primary">搜索</el-button>
+      <el-button :icon="Refresh" @click="resetInfo">重置</el-button>
+      <el-button @click="searchInfo" :icon="Search" type="primary">搜索</el-button>
     </div>
     <div class="rightBtn">
       <el-button @click="addCate" :icon="Plus" type="primary">添加分类</el-button>
@@ -21,7 +21,7 @@
 <script lang='ts'>
 import { defineComponent, reactive, toRefs } from 'vue'
 import { InitData } from "@/types/articleView/cateToolBar";
-import { Plus, RefreshRight } from '@element-plus/icons-vue'
+import { Search, Plus, Refresh } from '@element-plus/icons-vue'
 
 export default defineComponent({
   name: 'cateToolBar',
@@ -56,8 +56,9 @@ export default defineComponent({
     }
 
     return {
-      RefreshRight,
+      Refresh,
       Plus,
+      Search,
       searchInfo,
       resetInfo,
       pickerChange,

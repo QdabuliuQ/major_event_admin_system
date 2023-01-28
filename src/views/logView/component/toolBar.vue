@@ -19,13 +19,14 @@
     <div style="margin-right: 10px">
       <el-input v-model="input" placeholder="请输入搜索内容"></el-input>
     </div>
-    <el-button @click="resetInfo" style="margin-left: 15px">重置</el-button>
-    <el-button @click="searchInfo" type="primary">搜索</el-button>
+    <el-button :icon="Refresh" @click="resetInfo" style="margin-left: 15px">重置</el-button>
+    <el-button :icon="Search" @click="searchInfo" type="primary">搜索</el-button>
   </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent, reactive, toRefs } from "vue";
+import { Search, Refresh } from '@element-plus/icons-vue'
 import { InitData } from "@/types/logView/toolBar";
 
 export default defineComponent({
@@ -58,6 +59,7 @@ export default defineComponent({
     }
 
     return {
+      Search, Refresh,
       resetInfo,
       searchInfo,
       pickerChange,

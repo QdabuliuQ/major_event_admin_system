@@ -135,7 +135,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="visiblePwdDia = false">取消</el-button>
-          <el-button type="primary" @click="updatePwd"> 提交 </el-button>
+          <el-button type="primary" @click="updatePwd">提交</el-button>
         </span>
       </template>
     </el-dialog>

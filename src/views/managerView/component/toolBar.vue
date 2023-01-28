@@ -8,17 +8,18 @@
         <el-option label="封禁" value="2" />
       </el-select>
       <el-input v-model="input" placeholder="请输入搜索内容"> </el-input>
-      <el-button @click="resetInfo" style="margin-left: 15px">重置</el-button>
-      <el-button @click="searchInfo" type="primary">搜索</el-button>
+      <el-button :icon="Refresh" @click="resetInfo" style="margin-left: 15px">重置</el-button>
+      <el-button :icon="Search" @click="searchInfo" type="primary">搜索</el-button>
     </div>
     <div class="rightBtnBar">
-      <el-button @click="addAdmin" type="primary">添加管理员</el-button>
+      <el-button :icon="Plus" @click="addAdmin" type="primary">添加管理员</el-button>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent, reactive, toRefs } from "vue";
+import { Search, Refresh, Plus } from '@element-plus/icons-vue'
 import { InitData } from "@/types/manageView/toolBar";
 
 export default defineComponent({
@@ -45,6 +46,8 @@ export default defineComponent({
     }
 
     return {
+      Plus,
+      Search, Refresh,
       searchInfo,
       resetInfo,
       addAdmin,

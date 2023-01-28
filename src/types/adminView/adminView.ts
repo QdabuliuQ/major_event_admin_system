@@ -44,6 +44,11 @@ export class InitData {
           index: "2-2",
           path: "/articleList",
         },
+        {
+          name: "文章举报",
+          index: "2-3",
+          path: "/articleReport",
+        },
       ],
     },
     {

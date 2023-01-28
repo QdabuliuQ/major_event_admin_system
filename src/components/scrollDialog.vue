@@ -1,11 +1,11 @@
 <template>
   <el-dialog class="scrollDialogContainer" v-model="dialogVisible" :title="title" :width="width ? width : '40%'" :before-close="handleClose">
     <el-scrollbar :lock-scroll="true" :height="(height ? height : 370) + 'px'">
-      <div style="padding: 30px 30px 20px">
+      <div style="padding: 30px 25px 20px 20px">
         <slot></slot>
       </div>
     </el-scrollbar>
-    <template #footer>
+    <template v-if="!footer" #footer>
       <span class="dialog-footer">
         <el-button @click="dialogVisible = false">{{ cancelVal? cancelVal: '取消' }}</el-button>
         <el-button type="primary" @click="confirm">
@@ -26,7 +26,7 @@ interface ComInitData {
 export default defineComponent({
   name: 'scrollDialog',
   emits: ['handleClose', 'confirm', 'update:modelValue'],
-  props: ['visible', 'title', 'height', 'width', 'cancelVal', 'confirmVal'],
+  props: ['visible', 'title', 'height', 'width', 'cancelVal', 'confirmVal', 'footer'],
   setup(props, context) {
     const data: ComInitData = reactive({
       dialogVisible: false

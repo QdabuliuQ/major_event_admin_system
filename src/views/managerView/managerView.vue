@@ -19,10 +19,10 @@
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button @click="editInfo(scope.$index)" type="primary"
+          <el-button :icon="Edit" size="small" @click="editInfo(scope.$index)" type="primary"
             >编辑信息</el-button
           >
-          <el-button @click="editInfo(scope.$index, 'password')" type="warning"
+          <el-button :icon="Edit" size="small" @click="editInfo(scope.$index, 'password')" type="warning"
             >修改密码</el-button
           >
         </template>
@@ -162,6 +162,7 @@ import {
 } from "vue";
 import type { FormInstance } from "element-plus";
 import toolBar from "./component/toolBar.vue";
+import { Edit } from '@element-plus/icons-vue'
 import { getAdminList, addAdminInfo, updateAdminInfo, updateAdminPwd } from "@/network/managerView";
 import { InitData } from "@/types/manageView/managerView";
 
@@ -365,6 +366,7 @@ export default defineComponent({
     }
 
     return {
+      Edit,
       addAdmin,
       submitAdminInfo,
       addDialogClose,

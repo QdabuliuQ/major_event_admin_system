@@ -11,6 +11,7 @@ const backNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/
 const receNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/receNoticeInfo.vue')
 const articleCate = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleCate.vue')
 const articleList = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleList.vue')
+const articleReport = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleReport.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -58,6 +59,14 @@ const routes: Array<RouteRecordRaw> = [
           index: '2-2'
         },
         component: articleList
+      },
+      {
+        path: '/articleReport',
+        name: 'articleReport',
+        meta: {
+          index: '2-3'
+        },
+        component: articleReport
       },
       {
         path: '/supAdminLog',
