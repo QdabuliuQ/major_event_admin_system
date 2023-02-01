@@ -1,3 +1,5 @@
+import { SearchFormInt } from "../articleView/articleList";
+
 export class InitData {
   offset: number = 1
   pageSize: number = 1
@@ -137,4 +139,30 @@ export class InitData {
     newPassword: '',
     rootPassword: ''
   }
+
+
+  form: SearchFormInt[] = [
+    {
+      type: 'select',
+      name: 'status',
+      option: [
+        {
+          label: '正常',
+          value: 1
+        },
+        {
+          label: '封禁',
+          value: 2
+        },
+      ],
+      width: 150,
+      placeholder: '账号状态'
+    },
+    {
+      type: 'input',
+      name: 'val',
+      width: 250,
+      placeholder: '请输入搜索内容'
+    },
+  ]
 }

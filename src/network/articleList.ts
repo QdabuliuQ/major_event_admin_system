@@ -3,6 +3,11 @@ import $http from "./http";
 // 获取文章列表
 export function getArticleList(data: {
   offset: number
+  cate_id?: string
+  state?: string
+  startTime?: number
+  endTime?: number
+  val?: string
 }) {
   return $http({
     url: '/art/getArticleList',

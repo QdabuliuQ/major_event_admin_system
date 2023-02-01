@@ -1,3 +1,5 @@
+import { SearchFormInt } from "./articleList";
+
 export class InitData {
   offset: number = 1
   pageSize: number = 10
@@ -78,4 +80,33 @@ export class InitData {
 
   targetInput: string = ''
   noMore: boolean = false
+
+  form: SearchFormInt[] = [
+    {
+      type: 'input',
+      name: 'val',
+      width: 200,
+      placeholder: '请输入搜索内容'
+    },
+    {
+      type: 'select',
+      name: 'state',
+      option: [
+        {
+          label: '正常',
+          value: 0
+        },
+        {
+          label: '禁用',
+          value: 1
+        },
+      ],
+      width: 150,
+      placeholder: '分类状态'
+    },
+    {
+      type: 'date-picker',
+      name: 'time',
+    },
+  ]
 }

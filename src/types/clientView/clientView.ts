@@ -1,4 +1,4 @@
-// import type { FormRules } from 'element-plus'
+import { SearchFormInt } from "../articleView/articleList";
 
 export class InitData {
   uploadType: string = ''
@@ -103,4 +103,33 @@ export class InitData {
 
   val: string = ''
   status: number = -1
+
+  form: SearchFormInt[] = [
+    {
+      type: 'select',
+      name: 'status',
+      option: [
+        {
+          label: '正常',
+          value: 1
+        },
+        {
+          label: '封禁',
+          value: 2
+        },
+        {
+          label: '禁言',
+          value: 3
+        },
+      ],
+      width: 150,
+      placeholder: '账号状态'
+    },
+    {
+      type: 'input',
+      name: 'val',
+      width: 250,
+      placeholder: '请输入搜索内容'
+    },
+  ]
 }

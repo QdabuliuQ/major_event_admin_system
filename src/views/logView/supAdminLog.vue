@@ -1,6 +1,6 @@
 <template>
   <div id="supAdminLog">
-    <toolBar @resetInfo='resetInfo' @searchInfo='searchInfo' />
+    <searchForm ref="searchFormRef" :form="form" @reset-info="getData()" @search-info="getData()" />
     <el-table :data="logData" style="width: 100%">
       <el-table-column prop="log_id" label="日志ID" width="300" />
       <el-table-column label="类型" width="80">
@@ -146,70 +146,54 @@ import {
   toRefs,
   getCurrentInstance,
   ComponentInternalInstance,
+  onMounted,
+  ref
 } from "vue";
 import { getOperationLog } from "@/network/supAdminLog";
 import { InitData } from "@/types/logView/supAdminLog";
-import toolBar from "./component/toolBar.vue";
+import searchForm from "@/components/searchForm.vue";
 
 export default defineComponent({
   name: "supAdminLog",
   components: {
-    toolBar
+    searchForm
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive(new InitData());
+    const searchFormRef = ref()
 
     // 切换页面
     const pageChange = (e: number) => {
       data.offset = e
-      if(data.startTime != 9007199254740991n || data.endTime != 9007199254740991n || data.val != '' || data.type != '-1') {
-        getData(data.startTime, data.endTime, data.type, data.val)
-      } else {
-        getData();
-      }
+      getData();
     }
 
     // 获取数据
-    const getData = (startTime?: bigint, endTime?: bigint, type?: string, val?: string) => {
+    const getData = () => {
+      let form = searchFormRef.value.getValue()
       getOperationLog({
         offset: data.offset,
-        startTime,
-        endTime,
-        type,
-        val
+        startTime: form.time.value.length ? form.time.value[0] : null,
+        endTime: form.time.value.length ? form.time.value[1] : null,
+        type: form.type.value,
+        val: form.val.value
       }).then((res: any) => {
         data.logData = res.data.data;
         data.total = res.data.count
         data.pageSize = res.data.pageSize
       });
     };
-    getData();
+    
 
-    // 搜索信息
-    const searchInfo = (d: any) => {
-      data.offset = 1
-      data.startTime = d.startTime
-      data.endTime = d.endTime
-      data.type = d.type
-      data.val = d.val
-      getData(d.startTime, d.endTime, d.type, d.val)
-    }
-
-    // 重置信息
-    const resetInfo = () => {
-      data.offset = 1
-      data.startTime = 9007199254740991n
-      data.endTime = 9007199254740991n
-      data.type = '-1'
-      data.val = ''
-      getData()
-    }
+    onMounted(() => {
+      getData();
+    })
 
     return {
-      resetInfo,
-      searchInfo,
+      searchFormRef,
+      getData,
       pageChange,
       proxy,
       ...toRefs(data),

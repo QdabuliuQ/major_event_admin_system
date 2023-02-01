@@ -1,6 +1,6 @@
 <template>
   <div id="managerView">
-    <toolBar @searchInfo='searchInfo' @resetInfo='resetInfo' @addAdmin="addAdmin" />
+    <searchForm ref="searchFormRef" @search-info="getAdmin()" @reset-info="getAdmin()" :form="form"  />
     <el-table :data="adminData" style="width: 100%">
       <el-table-column prop="admin_id" label="ID" width="180" />
       <el-table-column prop="name" label="用户姓名" width="180" />
@@ -159,39 +159,41 @@ import {
   ref,
   getCurrentInstance,
   ComponentInternalInstance,
+  onMounted
 } from "vue";
 import type { FormInstance } from "element-plus";
-import toolBar from "./component/toolBar.vue";
 import { Edit } from '@element-plus/icons-vue'
 import { getAdminList, addAdminInfo, updateAdminInfo, updateAdminPwd } from "@/network/managerView";
 import { InitData } from "@/types/manageView/managerView";
+import searchForm from "@/components/searchForm.vue";
 
 export default defineComponent({
   name: "managerView",
   components: {
-    toolBar,
+    searchForm,
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
-
+    const searchFormRef = ref()
     const infoFromRef: any = ref<FormInstance>();
     const addInfoFromRef: any = ref<FormInstance>();
     const pwdFormRef: any = ref<FormInstance>();
     const data = reactive(new InitData());
 
-    const getAdmin = (val?: string, status?: string) => {
+    const getAdmin = () => {
+      let form = searchFormRef.value.getValue()
       getAdminList({
         offset: data.offset,
-        val,
-        status
+        val: form.val.value,
+        status: form.status.value
       }).then((res: any) => {
         data.adminData = res.data.data;
         data.total = res.data.count;
         data.pageSize = res.data.pageSize;
       });
     };
-    getAdmin();
+    
 
     // 打开管理员dialog
     const addAdmin = () => {
@@ -247,12 +249,7 @@ export default defineComponent({
 
     const pageChange = (e: number) => {
       data.offset = e
-      if(data.val != '' || data.status != '-1') {
-        getAdmin(data.val, data.status);
-
-      } else {
-        getAdmin();
-      }
+      getAdmin();
     };
 
     const editInfo = (i: number, type?: string) => {
@@ -305,25 +302,6 @@ export default defineComponent({
       })
     };
 
-    // 重置列表信息
-    const resetInfo = () => {
-      data.offset = 1
-      data.val = '' 
-      data.status = '-1'
-      getAdmin()
-    }
-
-    // 搜索信息
-    const searchInfo = (d: {
-      val: string
-      status: string
-    }) => {
-      data.offset = 1
-      data.val = d.val
-      data.status = d.status
-      getAdmin(d.val, d.status)
-    }
-
     // 关闭更新密码窗口回调
     const pwdDialogClose = () => {
       pwdFormRef.value.resetFields();
@@ -365,7 +343,13 @@ export default defineComponent({
       })
     }
 
+    onMounted(() => {
+      getAdmin();
+    })
+
     return {
+      searchFormRef,
+      getAdmin,
       Edit,
       addAdmin,
       submitAdminInfo,
@@ -373,8 +357,6 @@ export default defineComponent({
       updateInfo,
       editInfo,
       pageChange,
-      resetInfo,
-      searchInfo,
       updatePwd,
       pwdDialogClose,
       infoFromRef,

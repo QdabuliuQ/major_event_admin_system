@@ -1,3 +1,5 @@
+import { SearchFormInt } from "../articleView/articleList";
+
 export class InitData {
   offset: number = 1
 
@@ -26,4 +28,33 @@ export class InitData {
   endTime: bigint = 9007199254740991n
   type: string = '-1'
   val: string = ''
+
+  form: SearchFormInt[] = [
+    {
+      type: 'date-picker',
+      name: 'time',
+    },
+    {
+      type: 'select',
+      name: 'type',
+      option: [
+        {
+          label: '添加',
+          value: 1
+        },
+        {
+          label: '更改',
+          value: 2
+        },
+      ],
+      width: 150,
+      placeholder: '操作类型'
+    },
+    {
+      type: 'input',
+      name: 'val',
+      width: 250,
+      placeholder: '请输入搜索内容'
+    },
+  ]
 }

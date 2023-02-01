@@ -1,6 +1,6 @@
 <template>
   <div id="clientView">
-    <inputSearch @searchInfo="searchInfo" @resetInfo='resetInfo' />
+    <searchForm ref="searchFormRef" @search-info="getUser()" @reset-info="getUser()" :form="form" />
     <el-table :data="userData" style="width: 100%">
       <el-table-column prop="id" label="ID" width="130" />
       <el-table-column label="头像" width="100">
@@ -10,7 +10,6 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="username" label="姓名" width="180" /> -->
       <el-table-column prop="nickname" label="昵称" />
       <el-table-column prop="email" label="邮箱" />
       <el-table-column prop="phone" label="手机号" />
@@ -161,18 +160,18 @@ import {
   updateUserPwd,
 } from "@/network/clientView";
 import { InitData } from "@/types/clientView/clientView";
-import inputSearch from "./component/inputSearch.vue";
+import searchForm from "@/components/searchForm.vue";
 
 export default defineComponent({
   name: "clientView",
   components: {
-    inputSearch,
+    searchForm,
     scrollDialog,
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
-
+    const searchFormRef = ref()
     const inputUploadRef: any = ref();
     const infoFromRef: any = ref<FormInstance>();
     const pwdFormRef: any = ref<FormInstance>();
@@ -180,31 +179,21 @@ export default defineComponent({
     const data: InitData = reactive(new InitData());
 
     // 获取所有用户信息
-    const getUser = (val?: string, status?: number) => {
+    const getUser = () => {
+      let form = searchFormRef.value.getValue()
+      console.log(form);
+      
       getUserList({
         offset: data.offset,
-        val,
-        status
+        val: form.val.value,
+        status: form.status.value
       }).then((res: any) => {
         data.userData = res.data.data;
         data.total = res.data.count;
         data.pageSize = res.data.pageSize;
       });
     };
-    getUser();
-
-    const filterStatus = (status: number): string => {
-      switch (status) {
-        case 1:
-          return "正常";
-        case 2:
-          return "封禁";
-        case 3:
-          return "禁言";
-        default:
-          return "";
-      }
-    };
+    
 
     const edieInfo = (index: number, type?: string) => {
       data.userData[index].status = data.userData[index].status.toString()
@@ -302,7 +291,6 @@ export default defineComponent({
 
     // 更新用户密码
     const updatePwd = () => {
-      console.log(data.tmpData);
       // 验证表单信息
       pwdFormRef.value.validate((vaild: any, field: any) => {
         if (vaild) {
@@ -344,38 +332,22 @@ export default defineComponent({
     // 页数改变
     const pageChange = (val: any) => {
       data.offset = val;
-      if(data.val != '' || data.status != -1) {
-        getUser(data.val, data.status);
-      } else {
-        getUser();
-      }
+      getUser();
     };
 
-    const searchInfo = (d: { key: string; val: string; status: number }) => {
-      data.offset = 1;
-      data.val = d.val
-      data.status = d.status
-      getUser(d.val, d.status)
-    };
-
-    const resetInfo = () => {
-      data.offset = 1;
-      data.val = '' 
-      data.status = -1
-      getUser()
-    }
-
-    onMounted(() => {});
+    onMounted(() => {
+      getUser();
+    });
 
     return {
+      getUser,
       pwdDialogClose,
-      resetInfo,
-      searchInfo,
       updatePwd,
       pageChange,
       updateInfo,
       updateAvatar,
       edieInfo,
+      searchFormRef,
       inputUploadRef,
       infoFromRef,
       pwdFormRef,

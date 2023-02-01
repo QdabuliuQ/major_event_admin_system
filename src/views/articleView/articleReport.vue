@@ -1,6 +1,11 @@
 <template>
   <div id="articleReport">
-    <reportToolBar :reasonList="ressonList" @searchInfo="searchInfo" @resetInfo="resetInfo" @addReason="addReason" />
+    <div class="reportNav">
+      <searchForm @search-info="getData()" @reset-info="getData()" ref="searchFormRef" :form="form" />
+      <div style="margin-bottom: 15px">
+        <el-button :icon="CollectionTag" @click="addReason" type="primary">举报理由管理</el-button>
+      </div>
+    </div>
     <el-table :data="reportData" style="width: 100%">
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="art_id" label="文章ID" />
@@ -41,6 +46,10 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="paginationContainer">
+      <el-pagination @current-change="pageChange" :current-page="offset" :page-size="pageSize" background
+        layout="prev, pager, next" :total="total" />
+    </div>
   </div>
   <el-drawer
     :lock-scroll="true"
@@ -117,7 +126,7 @@
       <el-button @click="addReasonTarget" style="margin-left: 10px" type="primary">添加</el-button>
     </div>
     <div class="reasonItemContainer">
-      <el-tag @close="removeTarget(item.name)" v-for="item,index in ressonList" :key="item.name" closable>
+      <el-tag @close="removeTarget(item.name)" v-for="item,index in reasonList" :key="item.name" closable>
         {{ item.name }}
       </el-tag>
     </div>
@@ -125,39 +134,50 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, getCurrentInstance, ComponentInternalInstance, reactive, toRefs } from 'vue'
-import { Document, Message } from '@element-plus/icons-vue'
+import { defineComponent, ref, onMounted, getCurrentInstance, ComponentInternalInstance, reactive, toRefs } from 'vue'
+import { CollectionTag, Document, Message } from '@element-plus/icons-vue'
 import { getReportList, deleteReportReason, addReportReason, getReportReason, updateReportState } from "@/network/articleReport";
 import { InitData } from "@/types/articleView/articleReport";
 import articleContent from "@/components/articleContent.vue";
 import scrollDialog from "@/components/scrollDialog.vue";
-import reportToolBar from "./component/reportToolBar.vue";
+import searchForm from "@/components/searchForm.vue";
 
 export default defineComponent({
   name: 'articleReport',
   components: {
     articleContent,
     scrollDialog,
-    reportToolBar
+    searchForm
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive(new InitData())
+    const searchFormRef = ref()
+
 
     const getData = () => {
+      let form = searchFormRef.value.getValue()
       getReportList({
         offset: data.offset,
-        reason: data.reason,
-        startTime: data.startTime == 9007199254740991n ? 0 : data.startTime,
-        endTime: data.endTime == 9007199254740991n ? 0 : data.endTime,
-        val: data.val,
-        state: data.state,
+        reason: form.reason.value,
+        startTime: form.time.value.length ? form.time.value[0] : null,
+        endTime: form.time.value.length ? form.time.value[1] : null,
+        val: form.val.value,
+        state: form.state.value,
       }).then((res: any) => {
         data.reportData = res.data.data
+        data.pageSize = res.data.pageSize
+        data.total = res.data.count
       })
     }
-    getData()
+    
+
+    // 页面切换回调
+    const pageChange = (e: number) => {
+      data.offset = e
+      getData()
+    }
 
     const getReason = () => {
       getReportReason().then((res: any) => {
@@ -168,7 +188,15 @@ export default defineComponent({
             type: 'error'
           })
         }
-        data.ressonList = res.data.data
+        let option = []
+        for(let item of res.data.data) {
+          option.push({
+            label: item.name,
+            value: item.name
+          })
+        }
+        data.form[0].option = option
+        data.reasonList = res.data.data
       })
     }
     getReason()
@@ -257,33 +285,19 @@ export default defineComponent({
       })
     }
 
-    // 重置信息
-    const resetInfo = () => {
-      data.startTime = 9007199254740991n
-      data.endTime = 9007199254740991n
-      data.reason = ''
-      data.val = ''
-      data.state = ''
-      data.offset = 1
+    onMounted(() => {
       getData()
-    }
-    const searchInfo = (e: any) => {
-      data.startTime = e.startTime
-      data.endTime = e.endTime
-      data.reason = e.reason
-      data.val = e.val
-      data.state = e.state
-      data.offset = 1
-      getData()
-    }
+    })
 
     return {
-      searchInfo,
-      resetInfo,
+      getData,
+      searchFormRef,
+      pageChange,
       removeTarget,
       addReasonTarget,
       addReason,
       updateState,
+      CollectionTag,
       Message,
       Document,
       proxy,
@@ -329,6 +343,11 @@ export default defineComponent({
   }
 }
 #articleReport {
+  .reportNav {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
   .tableUserInfo {
     margin-left:5px;
     font-size: 13px;

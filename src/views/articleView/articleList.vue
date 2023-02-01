@@ -1,5 +1,12 @@
 <template>
   <div id="articleList">
+    <div class="toolNavBar">
+      <searchForm 
+        ref="searchFormRef"
+        @searchInfo="setData"
+        @resetInfo="setData"
+        :form="form" />
+    </div>
     <el-table :data="listData" style="width: 100%">
       <el-table-column prop="id" label="文章ID" />
       <el-table-column prop="cate_name" label="文章类别" width="100">
@@ -31,7 +38,7 @@
           <div class="tableUserInfo">
             <el-avatar :src="scope.row.user_pic" />
             <div class="userDetail">
-              <div>{{ scope.row.nickname }}</div>
+              <div class="userName">{{ scope.row.nickname }}</div>
               <div class="userId">{{ scope.row.author_id }}</div>
             </div>
           </div>
@@ -43,61 +50,84 @@
             activeIndex = scope.$index
             drawer = true
           }" :icon="Document" size="small" type="primary">查看文章</el-button>
-          <el-button @click="updateState('2', scope.row.id)" :icon="CloseBold" v-if="scope.row.state == '1'" type="danger" size="small">封禁</el-button>
-          <el-button @click="updateState('1', scope.row.id)" :icon="Select" v-else type="success" size="small">解封</el-button>
+          <el-button @click="updateState('2', scope.row.id)" :icon="CloseBold" v-if="scope.row.state == '1'"
+            type="danger" size="small">封禁</el-button>
+          <el-button @click="updateState('1', scope.row.id)" :icon="Select" v-else type="success"
+            size="small">解封</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div class="paginationContainer">
+      <el-pagination @current-change="pageChange" :current-page="offset" :page-size="pageSize" background
+        layout="prev, pager, next" :total="total" />
+    </div>
   </div>
   <el-drawer :lock-scroll="true" v-model="drawer" title="查看文章" direction="rtl" :size="'40%'">
     <div v-if="listData.length">
-      <articleContent 
-        :title="listData[activeIndex].title"
-        :cate_name="listData[activeIndex].cate_name"
-        :targets="listData[activeIndex].targets"
-        :user_pic="listData[activeIndex].user_pic"
-        :nickname="listData[activeIndex].nickname"
-        :intro="listData[activeIndex].intro"
-        :pub_date="listData[activeIndex].pub_date"
-        :cover_img="listData[activeIndex].cover_img"
+      <articleContent :title="listData[activeIndex].title" :cate_name="listData[activeIndex].cate_name"
+        :targets="listData[activeIndex].targets" :user_pic="listData[activeIndex].user_pic"
+        :nickname="listData[activeIndex].nickname" :intro="listData[activeIndex].intro"
+        :pub_date="listData[activeIndex].pub_date" :cover_img="listData[activeIndex].cover_img"
         :content="listData[activeIndex].content" />
     </div>
   </el-drawer>
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, ComponentInternalInstance, getCurrentInstance, toRefs } from 'vue'
+import { defineComponent, ref, onMounted, reactive, ComponentInternalInstance, getCurrentInstance, toRefs } from 'vue'
 import { Document, CloseBold, Select } from '@element-plus/icons-vue'
 import { InitData } from "@/types/articleView/articleList";
 import { getArticleList, updateArticleState } from "@/network/articleList";
 import articleContent from "@/components/articleContent.vue";
+import searchForm from "@/components/searchForm.vue";
+import { getCateList } from "@/network/articleCate";
 
 export default defineComponent({
   name: 'articleList',
   components: {
-    articleContent
+    articleContent,
+    searchForm
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive(new InitData())
 
+    const searchFormRef = ref()
+
+    const setData = (e: any) => {
+      getData()
+    }
+
     const getData = () => {
+      let form = searchFormRef.value.getValue()
       getArticleList({
-        offset: data.offset
+        offset: data.offset,
+        cate_id: form.category.value,
+        state: form.state.value,
+        startTime: form.time.value.length ? form.time.value[0] : null,
+        endTime: form.time.value.length ? form.time.value[0] : null,
+        val: form.val.value
       }).then(res => {
-        console.log(res);
         data.listData = res.data.data
+        data.pageSize = res.data.pageSize
+        data.total = res.data.count
       })
     }
-    getData()
+    
+
+    // 切换页码
+    const pageChange = (e: number) => {
+      data.offset = e
+      getData()
+    }
 
     const updateState = (state: string, id: string) => {
       updateArticleState({
         id,
         state
       }).then((res: any) => {
-        if(res.data.state) {
+        if (res.data.state) {
           return proxy.$msg({
             title: '失败',
             message: res.data.msg,
@@ -113,7 +143,29 @@ export default defineComponent({
       })
     }
 
+    getCateList({
+      offset: 1,
+      limit: 999
+    }).then((res: any) => {
+      let option = []
+      for(let item of res.data.data) {
+        let op = {
+          label: item.name,
+          value: item.id
+        }
+        option.push(op)
+      }
+      data.form[0].option = option
+    })
+
+    onMounted(() => {
+      getData()
+    })
+
     return {
+      searchFormRef,
+      setData,
+      pageChange,
       updateState,
       Document,
       Select,
@@ -127,6 +179,9 @@ export default defineComponent({
 
 <style lang='less'>
 #articleList {
+  .toolNavBar {
+    display: flex;
+  }
   .articleTitle {
     text-overflow: ellipsis;
     overflow: hidden;
@@ -140,6 +195,14 @@ export default defineComponent({
 
     .userDetail {
       margin-left: 5px;
+      width: 60%;
+
+      .userName {
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
 
       .userId {
         font-size: 12px;

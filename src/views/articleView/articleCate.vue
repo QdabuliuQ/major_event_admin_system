@@ -1,6 +1,10 @@
 <template>
   <div id="articleCate">
-    <cateToolBar @resetInfo="resetInfo" @searchInfo="searchInfo" @addCate="addCate" />
+    <div class="cateNav">
+      <searchForm @search-info="getData()" @reset-info="getData()" ref="searchFormRef" :form="form" />
+      <el-button @click="addCate" :icon="Plus" type="primary">添加分类</el-button>
+    </div>
+    <!-- <cateToolBar @resetInfo="resetInfo" @searchInfo="searchInfo" @addCate="addCate" /> -->
     <el-table :data="cateData" style="width: 100%">
       <el-table-column prop="id" label="分类ID" />
       <el-table-column prop="name" label="名称" />
@@ -86,9 +90,9 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, ref, getCurrentInstance, ComponentInternalInstance, toRefs } from 'vue'
+import { defineComponent, reactive, onMounted, ref, getCurrentInstance, ComponentInternalInstance, toRefs } from 'vue'
 import type { FormInstance } from "element-plus";
-import { Close, Edit, Check, PriceTag } from '@element-plus/icons-vue'
+import { Plus, Close, Edit, Check, PriceTag } from '@element-plus/icons-vue'
 import {
   getCateList,
   addArticleCate,
@@ -99,35 +103,37 @@ import {
   deleteCategoryTarget
 } from "@/network/articleCate";
 import { InitData } from "@/types/articleView/articleCate";
-import cateToolBar from "./component/cateToolBar.vue";
+import searchForm from "@/components/searchForm.vue";
 
 export default defineComponent({
   name: 'articleCate',
   components: {
-    cateToolBar
+    searchForm
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const cateFormRef: any = ref<FormInstance>()
+    const searchFormRef = ref()
     const data: InitData = reactive(new InitData())
 
     // 获取数据
-    const getData = (val?: string, is_delete?: number, startTime?: BigInt, endTime?: BigInt) => {
+    const getData = () => {
+      let form = searchFormRef.value.getValue()
       getCateList({
         offset: data.offset,
         limit: data.pageSize,
-        val,
-        is_delete,
-        startTime: (startTime == 9007199254740991n ? 0 : startTime) as bigint,
-        endTime: (endTime == 9007199254740991n ? 0 : endTime) as bigint
+        val: form.val.value,
+        is_delete: form.state.value,
+        startTime: form.time.value.length ? form.time.value[0] : null,
+        endTime: form.time.value.length ? form.time.value[1] : null
       }).then(res => {
         data.cateData = res.data.data
         data.total = res.data.count
         data.noMore = res.data.noMore
       })
     }
-    getData()
+    
 
     const loadMore = () => {
       data.targetOffset ++
@@ -136,11 +142,7 @@ export default defineComponent({
 
     const pageChange = (e: number) => {
       data.offset = e
-      if (data.val != '' || data.is_delete != -1 || data.startTime != 9007199254740991n) {
-        getData(data.val, data.is_delete, data.startTime, data.endTime)
-      } else {
-        getData();
-      }
+      getData();
     }
 
     const updateItem = (e: number) => {
@@ -224,24 +226,6 @@ export default defineComponent({
           })
         }
       })
-    }
-
-    const searchInfo = (e: any) => {
-      data.val = e.val
-      data.is_delete = e.is_delete
-      data.startTime = e.startTime
-      data.endTime = e.endTime
-      data.offset = 1
-      getData(e.val, e.is_delete, e.startTime, e.endTime)
-    }
-
-    const resetInfo = () => {
-      data.val = ''
-      data.is_delete = -1
-      data.startTime = 9007199254740991n
-      data.endTime = 9007199254740991n
-      data.offset = 1
-      getData()
     }
 
     // 更新分类状态
@@ -369,15 +353,19 @@ export default defineComponent({
       data.targetList.length = 0
     }
 
+    onMounted(() => {
+      getData()
+    }) 
+
     return {
+      getData,
       drawerClose,
       loadMore,
       addTarget,
       closeEvent,
       targetItem,
-      resetInfo,
-      searchInfo,
       pageChange,
+      Plus,
       PriceTag,
       Edit,
       Close,
@@ -387,6 +375,7 @@ export default defineComponent({
       updateItem,
       submitInfo,
       handleClose,
+      searchFormRef,
       cateFormRef,
       proxy,
       ...toRefs(data),
@@ -416,6 +405,10 @@ export default defineComponent({
 #articleCate {
   .el-button--small {
     padding: 15px 11px;
+  }
+  .cateNav {
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>
