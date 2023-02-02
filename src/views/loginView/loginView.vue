@@ -56,7 +56,9 @@ export default defineComponent({
               type: "success",
             });
             localStorage.setItem("token", res.data.token);
-            router.push('/admin')
+            setTimeout(() => {
+              router.push('/admin')
+            }, 100);
           }
         });
       }

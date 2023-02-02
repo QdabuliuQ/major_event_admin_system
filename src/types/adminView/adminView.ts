@@ -85,5 +85,17 @@ export class InitData {
         },
       ],
     },
+    {
+      name: "评论管理",
+      index: "5",
+      icon: "user",
+      list: [
+        {
+          name: "评论列表",
+          index: "5-1",
+          path: "/commentList",
+        },
+      ],
+    },
   ]
 }

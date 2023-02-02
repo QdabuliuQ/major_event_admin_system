@@ -12,6 +12,7 @@ const receNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/
 const articleCate = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleCate.vue')
 const articleList = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleList.vue')
 const articleReport = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleReport.vue')
+const commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentList.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -131,6 +132,14 @@ const routes: Array<RouteRecordRaw> = [
           index: '4-2'
         },
         component: receNoticeInfo
+      },
+      {
+        path: '/commentList',
+        name: 'commentList',
+        meta: {
+          index: '5-1'
+        },
+        component: commentList
       },
     ]
   },
