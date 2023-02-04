@@ -95,6 +95,11 @@ export class InitData {
           index: "5-1",
           path: "/commentList",
         },
+        {
+          name: "评论举报",
+          index: "5-2",
+          path: "/commentReport",
+        },
       ],
     },
   ]

@@ -26,15 +26,19 @@ export function updateReportState(data: {
   })
 }
 
-export function getReportReason() {
+export function getReportReason(data?: {
+  type?: string
+}) {
   return $http({
     url: '/rep/getReportReason',
-    method: 'get'
+    method: 'get',
+    params: data
   })
 }
 
 export function addReportReason(data: {
   name: string
+  type?: string
 }) {
   return $http({
     url: '/rep/addReportReason',
@@ -45,6 +49,7 @@ export function addReportReason(data: {
 
 export function deleteReportReason(data: {
   name: string
+  type?: string
 }) {
   return $http({
     url: '/rep/deleteReportReason',

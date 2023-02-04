@@ -12,7 +12,7 @@
       <el-table-column prop="reason" label="举报理由" />
       <el-table-column label="提交时间">
         <template #default="scope">
-          {{ proxy.$moment(scope.row.time).format("YYYY-MM-DD HH:mm") }}
+          {{ proxy.$moment(scope.row.time).format("YYYY-MM-DD HH:mm:ss") }}
         </template>
       </el-table-column>
       <el-table-column label="状态">
