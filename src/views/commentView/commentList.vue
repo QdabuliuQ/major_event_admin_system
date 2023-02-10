@@ -23,17 +23,7 @@
       </el-table-column>
       <el-table-column label="发布者" width="190">
         <template #default="scope">
-          <div class="userInfo">
-            <el-avatar :src="scope.row.user_pic" />
-            <div class="userData">
-              <div class="userName">
-                {{ scope.row.nickname }}
-              </div>
-              <div class="userId">
-                {{ scope.row.user_id }}
-              </div>
-            </div>
-          </div>
+          <userInfo :user_pic="scope.row.user_pic" :nickname="scope.row.nickname" :user_id="scope.row.user_id" />
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
@@ -65,7 +55,8 @@
       :nickname="articleList[idx].nickname" :intro="articleList[idx].intro" :pub_date="articleList[idx].pub_date"
       :cover_img="articleList[idx].cover_img" :content="articleList[idx].content" />
   </el-drawer>
-  <el-drawer class="commentTableContainerClass" :size="'50%'" v-model="replyDrawer" :lock-scroll="true" title="回复评论" direction="rtl">
+  <el-drawer class="commentTableContainerClass" :size="'50%'" v-model="replyDrawer" :lock-scroll="true" title="回复评论"
+    direction="rtl">
     <el-table v-if="flootComments[replyIdx]" :border="true" stripe :data="flootComments[replyIdx].comments">
       <el-table-column label="评论ID" prop="comment_id" width="250" />
       <el-table-column prop="content" label="评论内容" width="300">
@@ -89,17 +80,7 @@
       </el-table-column>
       <el-table-column label="发布者" width="190">
         <template #default="scope">
-          <div class="userInfo">
-            <el-avatar :src="scope.row.user_pic" />
-            <div class="userData">
-              <div class="userName">
-                {{ scope.row.nickname }}
-              </div>
-              <div class="userId">
-                {{ scope.row.user_id }}
-              </div>
-            </div>
-          </div>
+          <userInfo :user_pic="scope.row.user_pic" :nickname="scope.row.nickname" :user_id="scope.row.user_id" />
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="120">
@@ -110,9 +91,8 @@
       </el-table-column>
     </el-table>
     <div class="paginationContainer">
-      <el-pagination hide-on-single-page @current-change="itemPageChange"
-        :current-page="flootComments[idx].offset" :page-size="itemPageSize" background
-        layout="prev, pager, next" :total="flootComments[idx].count" />
+      <el-pagination hide-on-single-page @current-change="itemPageChange" :current-page="flootComments[idx].offset"
+        :page-size="itemPageSize" background layout="prev, pager, next" :total="flootComments[idx].count" />
     </div>
   </el-drawer>
 </template>
@@ -123,12 +103,14 @@ import { InitData } from "@/types/commentView/commentList";
 import { getCommentList, getCommentFloor, deleteComment, getArticleDetail } from "@/network/commentList";
 import articleContent from "@/components/articleContent.vue";
 import searchForm from "@/components/searchForm.vue";
+import userInfo from "@/components/userInfo.vue";
 
 export default defineComponent({
   name: 'commentList',
   components: {
     articleContent,
-    searchForm
+    searchForm,
+    userInfo
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
@@ -191,7 +173,7 @@ export default defineComponent({
     // 查看回复评论
     const replyInfo = (i: number) => {
       data.replyIdx = i
-      if(!data.flootComments[i].comments) {
+      if (!data.flootComments[i].comments) {
         getCommentFloor({
           comment_id: data.comments[data.replyIdx].comment_id,
           art_id: data.comments[data.replyIdx].art_id,
@@ -284,43 +266,14 @@ export default defineComponent({
 
 <style lang='less'>
 .el-table-fixed-column--right {
-    z-index: 1 !important;
-  }
+  z-index: 1 !important;
+}
+
 .commentTableContainerClass {
   .commentContent {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
   }
-
-  .userInfo {
-    display: flex;
-    align-items: center;
-
-    .userData {
-      width: 50%;
-      font-size: 13px;
-      margin-left: 8px;
-
-      .userName {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        width: 100%;
-      }
-
-      .userId {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        width: 100%;
-        font-size: 12px;
-        color: rgb(167, 167, 167);
-      }
-    }
-  }
-}
-#commentList {
-  
 }
 </style>

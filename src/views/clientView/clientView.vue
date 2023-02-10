@@ -20,7 +20,7 @@
           <el-tag v-else-if="scope.row.status == 3" type="warning">禁言</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="320">
         <template #default="scope">
           <el-button @click="edieInfo(scope.$index)" type="primary"
             >编辑信息</el-button
@@ -28,6 +28,7 @@
           <el-button @click="edieInfo(scope.$index, 'password')" type="warning"
             >修改密码</el-button
           >
+          <el-button @click="router.push('/userInfo/articles/'+scope.row.id)">查看详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -152,6 +153,7 @@ import {
   ComponentInternalInstance,
 } from "vue";
 import axios from "axios";
+import { useRouter } from "vue-router";
 import type { FormInstance } from "element-plus";
 import scrollDialog from "@/components/scrollDialog.vue";
 import {
@@ -175,6 +177,7 @@ export default defineComponent({
     const inputUploadRef: any = ref();
     const infoFromRef: any = ref<FormInstance>();
     const pwdFormRef: any = ref<FormInstance>();
+    const router = useRouter()
 
     const data: InitData = reactive(new InitData());
 
@@ -340,6 +343,7 @@ export default defineComponent({
     });
 
     return {
+      router,
       getUser,
       pwdDialogClose,
       updatePwd,

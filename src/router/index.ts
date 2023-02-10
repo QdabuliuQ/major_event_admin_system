@@ -14,6 +14,10 @@ const articleList = () => import(/* webpackChunkName:"loginView" */ '@/views/art
 const articleReport = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleReport.vue')
 const commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentList.vue')
 const commentReport = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentReport.vue')
+const videoView = () => import(/* webpackChunkName:"loginView" */ '@/views/videoView/videoView.vue')
+const userInfoView = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/userInfoView.vue')
+const articles = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/articleList.vue')
+const videos = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/videoList.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -149,6 +153,60 @@ const routes: Array<RouteRecordRaw> = [
           index: '5-2'
         },
         component: commentReport
+      },
+      {
+        path: '/videoList',
+        name: 'videoList',
+        meta: {
+          index: '6-1'
+        },
+        component: videoView
+      },
+      {
+        path: '/userInfo',
+        name: 'userInfo',
+        children: [
+          {
+            path: '/userInfo/articles/:id',
+            name: 'articles',
+            component: articles
+          },
+          {
+            path: '/userInfo/articleCollect/:id',
+            name: 'articleCollect',
+            component: articles
+          },
+          {
+            path: '/userInfo/articleBrowse/:id',
+            name: 'articleBrowse',
+            component: articles
+          },
+          {
+            path: '/userInfo/articlePraise/:id',
+            name: 'articlePraise',
+            component: articles
+          },
+          {
+            path: '/userInfo/videos/:id',
+            name: 'videos',
+            component: videos
+          },
+          {
+            path: '/userInfo/videoCollect/:id',
+            name: 'videoCollect',
+            component: videos
+          },
+          {
+            path: '/userInfo/videoPraise/:id',
+            name: 'videoPraise',
+            component: videos
+          },
+          {
+            path: '/userInfo',
+            redirect: '/userInfo/articles/:id',
+          }
+        ],
+        component: userInfoView
       },
     ]
   },

@@ -7,11 +7,15 @@
           <el-menu :default-active="activeIndex">
             <el-sub-menu v-for="item in menuList" :index="item.index">
               <template #title>
+                <component v-if="item.icon" :is="item.icon"></component>
                 <span>{{ item.name }}</span>
               </template>
               <el-menu-item-group>
                 <el-menu-item @click="router.push(menu.path)" v-for="menu in item.list" :key="menu.index"
-                  :index="menu.index">{{ menu.name }}</el-menu-item>
+                  :index="menu.index">
+                  <component :is="Menu"></component>
+                  {{ menu.name }}
+                </el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
           </el-menu>
@@ -30,6 +34,7 @@
 
 <script lang='ts'>
 import { defineComponent, reactive, onMounted, onUnmounted, toRefs } from "vue";
+import { Menu } from '@element-plus/icons-vue'
 import { InitData } from "@/types/adminView/adminView";
 import { useRouter } from "vue-router";
 
@@ -59,6 +64,7 @@ export default defineComponent({
     })
 
     return {
+      Menu,
       router,
       ...toRefs(data),
     };
@@ -79,7 +85,7 @@ export default defineComponent({
     letter-spacing: 2px;
     background-color: #499afc;
     position: fixed;
-    z-index: 2;
+    z-index: 4;
     top: 0;
     left: 0;
     right: 0;
@@ -107,7 +113,10 @@ export default defineComponent({
 
         .el-sub-menu__title {
           color: #fff !important;
-
+          svg {
+            width: 18px;
+            margin-right: 5px;
+          }
           &:hover {
             background-color: #4d4d4d;
           }
@@ -116,7 +125,10 @@ export default defineComponent({
         .el-menu-item-group {
           .el-menu-item {
             color: #fff !important;
-
+            svg {
+              width: 18px;
+            margin-right: 5px;
+            }
             &:hover {
               background-color: #4d4d4d;
             }

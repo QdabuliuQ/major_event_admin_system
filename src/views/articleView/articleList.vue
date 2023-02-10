@@ -35,13 +35,18 @@
       </el-table-column>
       <el-table-column label="发布者" width="150">
         <template #default="scope">
-          <div class="tableUserInfo">
+          <userInfo 
+            :nickname="scope.row.nickname"
+            :user_pic="scope.row.user_pic"
+            :user_id="scope.row.author_id"
+          />
+          <!-- <div class="tableUserInfo">
             <el-avatar :src="scope.row.user_pic" />
             <div class="userDetail">
               <div class="userName">{{ scope.row.nickname }}</div>
               <div class="userId">{{ scope.row.author_id }}</div>
             </div>
-          </div>
+          </div> -->
         </template>
       </el-table-column>
       <el-table-column label="操作" width="190">
@@ -80,13 +85,15 @@ import { InitData } from "@/types/articleView/articleList";
 import { getArticleList, updateArticleState } from "@/network/articleList";
 import articleContent from "@/components/articleContent.vue";
 import searchForm from "@/components/searchForm.vue";
+import userInfo from "@/components/userInfo.vue";
 import { getCateList } from "@/network/articleCate";
 
 export default defineComponent({
   name: 'articleList',
   components: {
     articleContent,
-    searchForm
+    searchForm,
+    userInfo
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
@@ -186,29 +193,6 @@ export default defineComponent({
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-  }
-
-  .tableUserInfo {
-    display: flex;
-    align-items: center;
-    font-size: 13px;
-
-    .userDetail {
-      margin-left: 5px;
-      width: 60%;
-
-      .userName {
-
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-      }
-
-      .userId {
-        font-size: 12px;
-        color: #a6a6a6;
-      }
-    }
   }
 }
 </style>

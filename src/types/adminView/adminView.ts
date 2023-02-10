@@ -5,7 +5,7 @@ export class InitData {
   menuList: {
     name: string,
     index: string,
-    icon: string,
+    icon: any, 
     list: {
       name: string,
       index: string,
@@ -15,7 +15,7 @@ export class InitData {
     {
       name: "用户信息",
       index: "1",
-      icon: "user",
+      icon:'User',
       list: [
         {
           name: "普通用户",
@@ -32,7 +32,7 @@ export class InitData {
     {
       name: "文章管理",
       index: "2",
-      icon: "user",
+      icon: "Tickets",
       list: [
         {
           name: "文章分类",
@@ -54,7 +54,7 @@ export class InitData {
     {
       name: "操作日志",
       index: "3",
-      icon: "user",
+      icon: "Place",
       list: [
         {
           name: "超级管理员日志",
@@ -71,7 +71,7 @@ export class InitData {
     {
       name: "公告管理",
       index: "4",
-      icon: "user",
+      icon: "DataBoard",
       list: [
         {
           name: "后台公告",
@@ -88,7 +88,7 @@ export class InitData {
     {
       name: "评论管理",
       index: "5",
-      icon: "user",
+      icon: "ChatDotRound",
       list: [
         {
           name: "评论列表",
@@ -99,6 +99,18 @@ export class InitData {
           name: "评论举报",
           index: "5-2",
           path: "/commentReport",
+        },
+      ],
+    },
+    {
+      name: "视频管理",
+      index: "6",
+      icon: "VideoCamera",
+      list: [
+        {
+          name: "视频列表",
+          index: "6-1",
+          path: "/videoList",
         },
       ],
     },
