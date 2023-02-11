@@ -36,7 +36,6 @@ export default defineComponent({
     const { id } = route.params
     const data = reactive(new InitData())
 
-    console.log(router.currentRoute.value.name);
     data.routerName = router.currentRoute.value.name as string
 
     const pageChange = (e: number) => {

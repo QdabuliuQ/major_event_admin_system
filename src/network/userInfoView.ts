@@ -86,3 +86,34 @@ export function getPraiseVideoById(data: {
     method: 'get'
   })
 }
+
+export function getUserFollow(data: {
+  id: string
+  offset: number
+}) {
+  return $http({
+    url: '/my/getUserFollow',
+    params: data,
+    method: 'get'
+  })
+}
+
+export function getUserFans(data: {
+  id: string
+  offset: number
+}) {
+  return $http({
+    url: '/my/getUserFans',
+    params: data,
+    method: 'get'
+  })
+}
+
+export function getArticleDetail(data: {
+  id: string
+}) {
+  return $http({
+    url: '/my/getArticleDetail/'+data.id,
+    method: 'get'
+  })
+}

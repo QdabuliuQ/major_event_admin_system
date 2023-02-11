@@ -8,7 +8,7 @@ import { ElNotification } from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import moment from 'moment'; 
 import 'moment/locale/zh-cn'
-// import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import mitt from 'mitt'
 
 const app = createApp(App)
 
@@ -19,6 +19,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.config.globalProperties.$msg = ElNotification
 app.config.globalProperties.$url = 'http://127.0.0.1:8080'
 app.config.globalProperties.$moment = moment
+app.config.globalProperties.$mitt = new (mitt as any)()
 
 app.config.globalProperties.$fileType = function (fileName: any) {  // 判断文件类型
   let suffix = ''; // 后缀获取

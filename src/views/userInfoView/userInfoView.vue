@@ -44,22 +44,38 @@
       <el-tab-pane label="文章点赞" name="articlePraise"></el-tab-pane>
       <el-tab-pane label="视频收藏" name="videoCollect"></el-tab-pane>
       <el-tab-pane label="视频点赞" name="videoPraise"></el-tab-pane>
+      <el-tab-pane label="关注" name="userFollow"></el-tab-pane>
+      <el-tab-pane label="粉丝" name="userFans"></el-tab-pane>
     </el-tabs>
     <div style="margin: 10px 0">
       <router-view :key="$route.fullPath"></router-view>
     </div>
   </div>
+
   <el-empty v-else description="获取用户信息失败" />
+  <el-drawer v-model="articleDrawer" title="文章内容" direction="rtl" :size="'40%'">
+    <articleContent v-if="articleInfo" :title="articleInfo.title" :cate_name="articleInfo.cate_name"
+      :user_pic="articleInfo.user_pic" :targets="articleInfo.targets" :nickname="articleInfo.nickname"
+      :intro="articleInfo.intro" :pub_date="articleInfo.pub_date" :cover_img="articleInfo.cover_img"
+      :content="articleInfo.content" />
+  </el-drawer>
+  <el-dialog class="videoDialogClass" v-model="videoDialog" title="Tips" width="45%">
+    <video controls v-show="videoDialog" :src="videoUrl"></video>
+  </el-dialog>
 </template>
 
 <script lang='ts'>
-import { defineComponent, getCurrentInstance, ComponentInternalInstance, reactive, toRefs } from 'vue'
+import { defineComponent, getCurrentInstance, ComponentInternalInstance, reactive, toRefs, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getUserInfoById } from '@/network/userInfoView'
+import { getUserInfoById, getArticleDetail } from '@/network/userInfoView'
 import { InitData } from "@/types/userInfoView/userInfoView";
+import articleContent from "@/components/articleContent.vue";
 
 export default defineComponent({
   name: 'userInfoView',
+  components: {
+    articleContent
+  },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
@@ -73,7 +89,6 @@ export default defineComponent({
     getUserInfoById({
       id: id as string
     }).then((res: any) => {
-      console.log(res);
       if (res.data.status) {
         return proxy.$msg({
           title: '错误',
@@ -85,8 +100,37 @@ export default defineComponent({
     })
 
     const handleClick = (e: string) => {
-      router.replace(`/userInfo/${e}/`+id)
+      router.replace(`/userInfo/${e}/` + id)
     }
+    const articleClick = (id: string) => {
+      getArticleDetail({
+        id,
+      }).then((res: any) => {
+        if (res.data.status) {
+          return proxy.$msg({
+            title: '错误',
+            message: '获取文章信息失败',
+            type: 'error'
+          })
+        }
+        data.articleInfo = res.data.data
+        data.articleDrawer = true
+      })
+    }
+    const videoClick = (url: string) => {
+      data.videoUrl = url
+      data.videoDialog = true
+    }
+
+    onMounted(() => {
+      proxy.$mitt.on('articleInfo', articleClick)
+      proxy.$mitt.on('videoInfo', videoClick)
+    })
+
+    onUnmounted(() => {
+      proxy.$mitt.off('articleInfo', articleClick)
+      proxy.$mitt.off('videoInfo', videoClick)
+    })
 
     return {
       handleClick,
@@ -98,6 +142,16 @@ export default defineComponent({
 </script>
 
 <style lang='less'>
+.videoDialogClass {
+  .el-dialog__body {
+    padding: 0 20px 20px;
+  }
+
+  video {
+    width: 100%;
+    aspect-ratio: 2/1.2;
+  }
+}
 #userInfoView {
   .userBasicInfo {
     .bgImageContainer {

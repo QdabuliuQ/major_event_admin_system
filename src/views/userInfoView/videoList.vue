@@ -11,6 +11,7 @@
       :time="item.time"
       :state="item.state"
       :title="item.title"
+      :video_url="item.video_url"
     />
   </div>
   <el-empty v-else description="暂无视频相关数据" />

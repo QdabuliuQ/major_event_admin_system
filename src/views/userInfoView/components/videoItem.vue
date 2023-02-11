@@ -1,5 +1,7 @@
 <template>
-  <div id="videoItem">
+  <div @click="() => {
+    proxy.$mitt.emit('videoInfo', video_url)
+  }" id="videoItem">
     <div class="video_cover">
       <div :style="{backgroundColor: state == 3 || is_delete == 1 ? '#ee5757' : '#27b3ee'}" class="rightTarget">
         {{ state == '3' ? '封禁' :
@@ -40,6 +42,7 @@ export default defineComponent({
     'time',
     'state',
     'title',
+    'video_url'
   ],
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;

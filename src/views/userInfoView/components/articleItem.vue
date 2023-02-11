@@ -1,5 +1,5 @@
 <template>
-  <div class="articleItem">
+  <div @click="itemClick" class="articleItem">
     <div class="article_cover">
       <div :style="{backgroundColor: state == 2 || is_delete == 1 ? '#ee5757' : '#27b3ee'}" class="rightTarget">
         {{ state == '2' ? '封禁' :
@@ -38,13 +38,17 @@ export default defineComponent({
     'targets',
     'title',
   ],
-  setup() {
+  setup(props) {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive({})
-    onMounted(() => {
-    })
+    
+    const itemClick = () => {
+      proxy.$mitt.emit('articleInfo', props.id)
+    }
+
     return {
+      itemClick,
       proxy,
       ...toRefs(data),
     }
