@@ -13,6 +13,7 @@ const articleCate = () => import(/* webpackChunkName:"loginView" */ '@/views/art
 const articleList = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleList.vue')
 const articleReport = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleReport.vue')
 const commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentList.vue')
+const v_commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/v_commentList.vue')
 const commentReport = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentReport.vue')
 const videoView = () => import(/* webpackChunkName:"loginView" */ '@/views/videoView/videoView.vue')
 const userInfoView = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/userInfoView.vue')
@@ -148,10 +149,18 @@ const routes: Array<RouteRecordRaw> = [
         component: commentList
       },
       {
+        path: '/v_commentList',
+        name: 'v_commentList',
+        meta: {
+          index: '5-2'
+        },
+        component: v_commentList
+      },
+      {
         path: '/commentReport',
         name: 'commentReport',
         meta: {
-          index: '5-2'
+          index: '5-3'
         },
         component: commentReport
       },

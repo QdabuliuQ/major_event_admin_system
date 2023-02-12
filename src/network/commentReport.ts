@@ -7,6 +7,7 @@ export function getCommentReportList(data: {
   endTime?: number
   val?: string
   offset: number
+  type?: string
 }) {
   return $http({
     url: '/rep/getCommentReportList',

@@ -8,27 +8,19 @@
     </div>
     <el-table :data="reportData" style="width: 100%">
       <el-table-column prop="id" label="ID" />
-      <el-table-column label="评论ID">
+      <el-table-column label="评论内容">
         <template #default="scope">
-          <el-popover popper-class="commentReportInfoClass" :hide-after="0" placement="bottom" :width="250"
-            trigger="hover">
-            <div class="commentDetail">
-              <div class="leftInfo">
-                <el-avatar :src="scope.row.user_pic" />
-              </div>
-              <div class="rightInfo">
-                <div class="uInfo">{{ scope.row.nickname }}</div>
-                <div class="commentInfo">
-                  {{ scope.row.content }}
-                </div>
-              </div>
-            </div>
-            <template #reference>
-              <div class="comment_idLink">
-                {{ scope.row.comment_id }}
-              </div>
-            </template>
-          </el-popover>
+          <div class="commentContent">
+            {{ scope.row.content }}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="评论位置" width="90">
+        <template #default="scope">
+          <div class="commentContent">
+            <el-tag v-if="scope.row.type == '1'">文章</el-tag>
+            <el-tag v-else class="ml-2" type="success">视频</el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column width="120" prop="reason" label="举报理由" />
@@ -123,6 +115,7 @@ export default defineComponent({
         startTime: form.time.value.length ? form.time.value[0] : null,
         endTime: form.time.value.length ? form.time.value[1] : null,
         val: form.val.value,
+        type: form.type.value,
         offset: data.offset
       }).then((res: any) => {
         if (res.data.status) {
@@ -271,6 +264,7 @@ export default defineComponent({
 
 <style lang='less'>
 .commentReportInfoClass {
+  
   .commentDetail {
     display: flex;
 
@@ -325,7 +319,12 @@ export default defineComponent({
       margin-bottom: 15px;
     }
   }
-
+  .commentContent {
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
   .comment_idLink {
     width: 100%;
     text-overflow: ellipsis;

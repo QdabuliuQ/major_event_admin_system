@@ -3,7 +3,7 @@
     <searchForm @search-info="getData()" @reset-info="getData()" ref="searchFormRef" :form="form" />
     <el-table class="commentTableContainerClass" :data="comments" style="width: 100%">
       <el-table-column prop="comment_id" label="评论ID" width="250" />
-      <el-table-column prop="content" label="评论内容" width="300">
+      <el-table-column label="评论内容" width="300">
         <template #default="scope">
           <div :title="scope.row.content" class="commentContent">{{ scope.row.content }}</div>
         </template>
@@ -161,7 +161,7 @@ export default defineComponent({
       data.flootComments[data.replyIdx].offset = e
       getCommentFloor({
         comment_id: data.comments[data.replyIdx].comment_id,
-        art_id: data.comments[data.replyIdx].art_id,
+        art_id: data.comments[data.replyIdx].art_id as string,
         offset: data.flootComments[data.replyIdx].offset,
         limit: data.itemPageSize,
       }).then((res: any) => {
@@ -176,7 +176,7 @@ export default defineComponent({
       if (!data.flootComments[i].comments) {
         getCommentFloor({
           comment_id: data.comments[data.replyIdx].comment_id,
-          art_id: data.comments[data.replyIdx].art_id,
+          art_id: data.comments[data.replyIdx].art_id as string,
           offset: data.flootComments[data.replyIdx].offset,
           limit: data.itemPageSize,
         }).then((res: any) => {
@@ -193,7 +193,7 @@ export default defineComponent({
       data.idx = i
       if (!data.articleList[i]) {
         getArticleDetail({
-          id: data.comments[data.idx].art_id
+          id: data.comments[data.idx].art_id as string
         }).then((res: any) => {
           data.articleList[i] = res.data.data
           data.articleDrawer = true

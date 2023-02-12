@@ -35,6 +35,22 @@ export class InitData {
     },
     {
       type: 'select',
+      name: 'type',
+      option: [
+        {
+          label: '文章',
+          value: '1'
+        },
+        {
+          label: '视频',
+          value: '2'
+        },
+      ],
+      width: 150,
+      placeholder: '评论位置'
+    },
+    {
+      type: 'select',
       name: 'state',
       option: [
         {

@@ -59,7 +59,7 @@
       :intro="articleInfo.intro" :pub_date="articleInfo.pub_date" :cover_img="articleInfo.cover_img"
       :content="articleInfo.content" />
   </el-drawer>
-  <el-dialog class="videoDialogClass" v-model="videoDialog" title="Tips" width="45%">
+  <el-dialog class="videoDialogClass" v-model="videoDialog" title="视频播放" width="45%">
     <video controls v-show="videoDialog" :src="videoUrl"></video>
   </el-dialog>
 </template>
@@ -142,16 +142,6 @@ export default defineComponent({
 </script>
 
 <style lang='less'>
-.videoDialogClass {
-  .el-dialog__body {
-    padding: 0 20px 20px;
-  }
-
-  video {
-    width: 100%;
-    aspect-ratio: 2/1.2;
-  }
-}
 #userInfoView {
   .userBasicInfo {
     .bgImageContainer {

@@ -1,36 +1,13 @@
+import { IntComment } from "./commentList";
 import { SearchFormInt } from "../articleView/articleList";
-
-export interface IntComment {
-  art_id?: string
-  video_id?: string
-  comment_id: string
-  content: string
-  is_delete: number
-  nickname: string
-  parent_id: string
-  praise: number
-  reply: number
-  time: number
-  user_id: string
-  user_pic: string
-}
 
 export class InitData {
   offset: number = 1
-
-  pageSize: number = 0
-  total: number = 0
-  comments: IntComment[] = []
-  flootComments: any = null
-  articleDrawer: boolean = false
-  itemPageSize: number = 10
-
-  replyDrawer: boolean = false
-
-  idx: number = 0
-  replyIdx: number = 0
-
-  articleList: any[] = []
+  total: number = 1
+  pageSize: number = 1
+  videoDialog: boolean = false
+  videoUrl: string = ''
+  commentData: IntComment[] = []
 
   form: SearchFormInt[] = [
     {
@@ -60,4 +37,4 @@ export class InitData {
       placeholder: '请输入搜索内容'
     },
   ]
-} 
+}

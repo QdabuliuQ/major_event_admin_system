@@ -91,13 +91,18 @@ export class InitData {
       icon: "ChatDotRound",
       list: [
         {
-          name: "评论列表",
+          name: "文章评论",
           index: "5-1",
           path: "/commentList",
         },
         {
-          name: "评论举报",
+          name: "视频评论",
           index: "5-2",
+          path: "/v_commentList",
+        },
+        {
+          name: "评论举报",
+          index: "5-3",
           path: "/commentReport",
         },
       ],
