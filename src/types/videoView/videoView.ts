@@ -54,21 +54,9 @@ export class InitData {
           label: '封禁',
           value: 3
         },
-      ],
-      width: 150,
-      placeholder: '审核状态'
-    },
-    {
-      type: 'select',
-      name: 'is_delete',
-      option: [
-        {
-          label: '正常',
-          value: 0
-        },
         {
           label: '删除',
-          value: 1
+          value: 4
         },
       ],
       width: 150,

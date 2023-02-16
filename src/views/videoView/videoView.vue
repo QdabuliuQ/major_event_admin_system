@@ -23,17 +23,12 @@
           <el-button @click="dataDetail(scope.row.id, 'collect')" type="primary" link>{{ scope.row.collect_count }}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="审核状态" width="100">
+      <el-table-column label="视频状态" width="100">
         <template #default="scope">
           <el-tag v-if="scope.row.state == '1'" type="info">审核中</el-tag>
           <el-tag v-else-if="scope.row.state == '2'" type="success">正常</el-tag>
-          <el-tag v-else type="danger">封禁</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="视频状态" width="90">
-        <template #default="scope">
-          <el-tag v-if="scope.row.is_delete == '0'" type="success">正常</el-tag>
-          <el-tag v-else type="danger">删除</el-tag>
+          <el-tag v-else-if="scope.row.state == '3'" type="danger">封禁</el-tag>
+          <el-tag v-else-if="scope.row.state == '4'" type="warning">删除</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="提交时间" width="180">
@@ -61,11 +56,11 @@
       </el-table-column>
       <el-table-column fixed="right" width="180" label="操作">
         <template #default="scope">
-          <el-button @click="updateState(scope.row.id, '2', scope.$index)" :disabled="scope.row.state == '2'"
+          <el-button @click="updateState(scope.row.id, '2', scope.$index)" :disabled="scope.row.state == '4' || scope.row.state == '2'"
             :icon="Check" size="small" type="success">
             正常
           </el-button>
-          <el-button @click="updateState(scope.row.id, '3', scope.$index)" :disabled="scope.row.state == '3'"
+          <el-button @click="updateState(scope.row.id, '3', scope.$index)" :disabled="scope.row.state == '4' || scope.row.state == '3'"
             :icon="Close" size="small" type="danger">
             封禁
           </el-button>
@@ -120,7 +115,7 @@ export default defineComponent({
       getVideoList({
         offset: data.offset,
         state: form.state.value.toString(),
-        is_delete: form.is_delete.value.toString(),
+        // is_delete: form.is_delete.value.toString(),
         startTime: form.time.value.length ? form.time.value[0] : null,
         endTime: form.time.value.length ? form.time.value[1] : null,
         val: form.val.value
