@@ -24,13 +24,11 @@
       </el-table-column>
       <el-table-column label="提交用户">
         <template #default="scope">
-          <div style="display:flex;align-items:center">
-            <el-avatar :src="scope.row.user_pic" />
-            <div class="tableUserInfo">
-              <div class="userNickname">{{ scope.row.nickname }}</div>
-              <div class="userId">{{ scope.row.user_id }}</div>
-            </div>
-          </div>
+          <userInfo 
+            :user_id="scope.row.user_id"
+            :user_pic="scope.row.user_pic"
+            :nickname="scope.row.nickname"
+          />
         </template>
       </el-table-column>
       <el-table-column label="操作" width='220'>
@@ -81,36 +79,11 @@
     v-if="reportData.length && artIndex != -1"
   >
     <div class="reportInfoContainer">
-      <div class="infoItem">
-        <div class="itemName">
-          举报理由
-        </div>
-        <div class="itemValue">
-          {{ reportData[artIndex].reason }}
-        </div>
-      </div>
-      <div class="infoItem">
-        <div class="itemName">
-          举报描述
-        </div>
-        <div class="itemValue">
-          {{ reportData[artIndex].desc }}
-        </div>
-      </div>
-      <div v-if="reportData[artIndex].proof" class="infoItem">
-        <div class="itemName">
-          证明材料
-        </div>
-        <div class="itemValue itemImage">
-          <el-image
-            v-for="item,index in reportData[artIndex].proof"
-            style="width: 150px; height: 150px"
-            :src="item.link"
-            :preview-src-list="[item.link]"
-            fit="cover"
-          />
-        </div>
-      </div>
+      <reportInfo 
+        :reason="reportData[artIndex].reason"
+        :desc="reportData[artIndex].desc"
+        :proof="reportData[artIndex].proof"
+      />
     </div>
     <template #footer>
       <div style="flex: auto">
@@ -141,13 +114,17 @@ import { InitData } from "@/types/articleView/articleReport";
 import articleContent from "@/components/articleContent.vue";
 import scrollDialog from "@/components/scrollDialog.vue";
 import searchForm from "@/components/searchForm.vue";
+import userInfo from "@/components/userInfo.vue";
+import reportInfo from "./component/reportInfo.vue";
 
 export default defineComponent({
   name: 'articleReport',
   components: {
     articleContent,
     scrollDialog,
-    searchForm
+    searchForm,
+    userInfo,
+    reportInfo
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
@@ -204,7 +181,8 @@ export default defineComponent({
     const updateState = (state: string, id: string) => {
       updateReportState({
         state,
-        id
+        id,
+        type: '1'
       }).then((res: any) => {
         if(res.data.status) {
           return proxy.$msg({
@@ -347,13 +325,6 @@ export default defineComponent({
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
-  }
-  .tableUserInfo {
-    margin-left:5px;
-    font-size: 13px;
-    .userId {
-      color: #b1b1b1;
-    }
   }
 }
 </style>

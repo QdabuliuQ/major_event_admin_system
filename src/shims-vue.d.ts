@@ -5,5 +5,9 @@ declare module '*.vue' {
   export default component
 }
 
+declare module 'echarts' {
+  const echarts: any;
+  export default echarts;
+}
 declare module 'element-plus/dist/locale/zh-cn.mjs'
 declare module '@wangeditor/editor'

@@ -3,10 +3,17 @@
     proxy.$mitt.emit('videoInfo', video_url)
   }" id="videoItem">
     <div class="video_cover">
-      <div :style="{backgroundColor: state == 3 || is_delete == 1 ? '#ee5757' : '#27b3ee'}" class="rightTarget">
-        {{ state == '3' ? '封禁' :
-  is_delete == 1 ? '删除' : '正常'
-        }}
+      <div style="backgroundColor: rgb(170 170 170)" v-if="state == '1'" class="rightTarget">
+        审核中
+      </div>
+      <div style="backgroundColor: #47d719" v-else-if="state == '2'" class="rightTarget">
+        正常
+      </div>
+      <div style="backgroundColor: #ee5757" v-else-if="state == '3'" class="rightTarget">
+        封禁
+      </div>
+      <div style="backgroundColor: rgb(244 161 32)" v-else-if="state == '4'" class="rightTarget">
+        删除
       </div>
       <div class="mask">
         <el-icon color="#fff" size="50"><VideoPlay /></el-icon>

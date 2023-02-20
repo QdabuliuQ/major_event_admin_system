@@ -3,8 +3,17 @@
     <div class="topNav">大事件后台管理系统</div>
     <div class="bottomContainer">
       <div class="leftMenu">
-        <el-scrollbar class="menuScrollContainer" :height="height +'px'">
+        <el-scrollbar class="menuScrollContainer" :height="height + 'px'">
           <el-menu :default-active="activeIndex">
+            <el-menu-item @click="() => {
+              router.push('/index')
+              activeIndex = '0-0'
+            }" index="0-0">
+              <el-icon>
+                <House />
+              </el-icon>
+              <span>后台首页</span>
+            </el-menu-item>
             <el-sub-menu v-for="item in menuList" :index="item.index">
               <template #title>
                 <component v-if="item.icon" :is="item.icon"></component>
@@ -22,7 +31,10 @@
         </el-scrollbar>
       </div>
       <div class="rightRouterView">
-        <div class="routerContainer">
+        <div v-if="path == '/index'" class="_routerContainer">
+          <router-view></router-view>
+        </div>
+        <div v-else class="routerContainer">
           <div style="padding: 20px">
             <router-view></router-view>
           </div>
@@ -33,27 +45,34 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, onMounted, onUnmounted, toRefs } from "vue";
-import { Menu } from '@element-plus/icons-vue'
+import { defineComponent, reactive, onMounted, onUnmounted, toRefs, watch } from "vue";
+import { Menu, House } from '@element-plus/icons-vue'
 import { InitData } from "@/types/adminView/adminView";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
 let timer: any = null;
 
 export default defineComponent({
   name: "adminView",
   setup() {
+    const route = useRoute()
     const router = useRouter()
     const data: InitData = reactive(new InitData());
+    data.path = route.path
 
     const resizeEvent = () => {
-      if(timer) clearTimeout(timer)
+      if (timer) clearTimeout(timer)
       timer = setTimeout(() => {
         data.height = document.documentElement.clientHeight - document.getElementsByClassName('topNav')[0].clientHeight
       }, 200);
     }
 
+    watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
+      data.path = newValue
+    })
+
     onMounted(() => {
+      data.path = route.path
       data.activeIndex = router.currentRoute.value.meta.index as string;
       data.height = document.documentElement.clientHeight - document.getElementsByClassName('topNav')[0].clientHeight
       window.addEventListener('resize', resizeEvent)
@@ -64,6 +83,7 @@ export default defineComponent({
     })
 
     return {
+      House,
       Menu,
       router,
       ...toRefs(data),
@@ -74,6 +94,26 @@ export default defineComponent({
 
 <style lang='less'>
 #adminView {
+  .el-scrollbar__view {
+    .is-active {
+      color: #499afc !important;
+      background-color: #4d4d4d;
+      font-weight: bold;
+    }
+  }
+
+  .el-menu-item {
+    color: #fff;
+
+    .el-icon {
+      margin-right: 0;
+    }
+
+    &:hover {
+      background-color: #4d4d4d;
+    }
+  }
+
   .topNav {
     width: 100vw;
     height: 55px;
@@ -95,6 +135,7 @@ export default defineComponent({
     display: flex;
     justify-content: flex-end;
     margin-top: 55px;
+
     .menuScrollContainer {
       background-color: #393939;
     }
@@ -113,10 +154,12 @@ export default defineComponent({
 
         .el-sub-menu__title {
           color: #fff !important;
+
           svg {
             width: 18px;
             margin-right: 5px;
           }
+
           &:hover {
             background-color: #4d4d4d;
           }
@@ -125,10 +168,12 @@ export default defineComponent({
         .el-menu-item-group {
           .el-menu-item {
             color: #fff !important;
+
             svg {
               width: 18px;
-            margin-right: 5px;
+              margin-right: 5px;
             }
+
             &:hover {
               background-color: #4d4d4d;
             }
@@ -144,8 +189,11 @@ export default defineComponent({
     }
 
     .rightRouterView {
-
       width: calc(100% - 200px);
+
+      ._routerContainer {
+        margin: 20px;
+      }
 
       .routerContainer {
         margin: 20px;

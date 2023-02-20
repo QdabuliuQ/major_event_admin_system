@@ -18,6 +18,7 @@ export function getReportList(data: {
 export function updateReportState(data: {
   id: string
   state: string
+  type: string
 }) {
   return $http({
     url: '/rep/updateReportState',

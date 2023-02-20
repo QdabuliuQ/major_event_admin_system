@@ -77,6 +77,8 @@ img {
   video {
     width: 100%;
     aspect-ratio: 2/1.2;
+    object-fit: contain;
+    background-color: #000;
   }
 }
 </style>

@@ -230,16 +230,7 @@ export default defineComponent({
   }
 }
 
-.videoDialogClass {
-  .el-dialog__body {
-    padding: 0 20px 20px;
-  }
 
-  video {
-    width: 100%;
-    aspect-ratio: 2/1.2;
-  }
-}
 
 .el-table-fixed-column--right {
   z-index: 1 !important;

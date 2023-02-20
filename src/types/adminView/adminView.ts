@@ -1,6 +1,6 @@
 export class InitData { 
   height: number = 0
-
+  path: string = ''
   activeIndex: string = ''
   menuList: {
     name: string,
@@ -116,6 +116,11 @@ export class InitData {
           name: "视频列表",
           index: "6-1",
           path: "/videoList",
+        },
+        {
+          name: "视频举报",
+          index: "6-2",
+          path: "/videoReport",
         },
       ],
     },

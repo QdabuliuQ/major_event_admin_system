@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 const loginView = () => import(/* webpackChunkName:"loginView" */ '@/views/loginView/loginView.vue')
 const adminView = () => import(/* webpackChunkName:"loginView" */ '@/views/adminView/adminView.vue')
+const indexView = () => import(/* webpackChunkName:"loginView" */ '@/views/indexView/indexView.vue')
 const clientView = () => import(/* webpackChunkName:"loginView" */ '@/views/clientView/clientView.vue')
 const managerView = () => import(/* webpackChunkName:"loginView" */ '@/views/managerView/managerView.vue')
 const supAdminLog = () => import(/* webpackChunkName:"loginView" */ '@/views/logView/supAdminLog.vue')
@@ -16,6 +17,7 @@ const commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/com
 const v_commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/v_commentList.vue')
 const commentReport = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentReport.vue')
 const videoView = () => import(/* webpackChunkName:"loginView" */ '@/views/videoView/videoView.vue')
+const videoReport = () => import(/* webpackChunkName:"loginView" */ '@/views/videoView/videoReport.vue')
 const userInfoView = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/userInfoView.vue')
 const articles = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/articleList.vue')
 const videos = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/videoList.vue')
@@ -34,7 +36,15 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       {
         path: '/admin',
-        redirect: '/client'
+        redirect: '/index'
+      },
+      {
+        path: '/index',
+        name: 'index',
+        meta: {
+          index: '0-0'
+        },
+        component: indexView
       },
       {
         path: '/client',
@@ -171,6 +181,14 @@ const routes: Array<RouteRecordRaw> = [
           index: '6-1'
         },
         component: videoView
+      },
+      {
+        path: '/videoReport',
+        name: 'videoReport',
+        meta: {
+          index: '6-2'
+        },
+        component: videoReport
       },
       {
         path: '/userInfo',
