@@ -12,12 +12,12 @@
             </el-icon>后台公告
           </div>
           <div class="titleRight">
-            <el-icon>
+            <el-icon @click="router.push('/noticeList/1')">
               <MoreFilled />
             </el-icon>
           </div>
         </span>
-        <noticeList :list="backNotice" :title="'content'" :is_top="'is_top'" :time="'time'" />
+        <noticeList @itemClick="itemClick" :list="backNotice" type="1" :title="'title'" :is_top="'is_top'" :time="'time'" />
       </div>
       <div class="cardItem">
         <span class="cardTitle">
@@ -27,12 +27,12 @@
             </el-icon>前台公告
           </div>
           <div class="titleRight">
-            <el-icon>
+            <el-icon @click="router.push('/noticeList/2')">
               <MoreFilled />
             </el-icon>
           </div>
         </span>
-        <noticeList :list="receNotice" :title="'content'" :is_top="'is_top'" :time="'time'" />
+        <noticeList @itemClick="itemClick" :list="receNotice" type="2" :title="'title'" :is_top="'is_top'" :time="'time'" />
       </div>
       <div class="cardItem">
         <div style="width: 100%; height: 100%" id="lineChartContainer_1"></div>
@@ -46,13 +46,29 @@
         <mapChart />
       </div>
       <div class="cardItem">
+        <lineChart />
       </div>
     </div>
   </div>
+  <el-drawer class="noticeDrawerClass" v-model="drawer" :size="'40%'" :direction="'rtl'">
+    <template #header>
+      <h4>查看公告</h4>
+    </template>
+    <template #default>
+      <noticeContent 
+        v-if="tmpData"
+        :title="tmpData.title" 
+        :pub_name="tmpData.nickname" 
+        :pub_id="tmpData.pub_id"
+        :time="proxy.$moment(tmpData.time).format('YYYY-MM-DD HH:mm:ss')"
+        :content="tmpData.content" />
+    </template>
+  </el-drawer>
 </template>
 
 <script lang='ts'>
 import * as echarts from 'echarts';
+import { useRouter } from "vue-router";
 import { defineComponent, reactive, toRefs, getCurrentInstance, ComponentInternalInstance } from 'vue'
 import { InitData } from "@/types/indexView/indexView";
 import { MoreFilled, Promotion } from '@element-plus/icons-vue';
@@ -61,6 +77,8 @@ import dataPanel from "./components/dataPanel.vue";
 import noticeList from "./components/noticeList.vue";
 import regionChart from "./components/regionChart.vue";
 import mapChart from "./components/mapChart.vue";
+import lineChart from "./components/lineChart.vue";
+import noticeContent from "@/components/noticeContent.vue";
 
 export default defineComponent({
   name: 'indexView',
@@ -68,10 +86,13 @@ export default defineComponent({
     dataPanel,
     noticeList,
     regionChart,
-    mapChart
+    mapChart,
+    lineChart,
+    noticeContent
   },
   setup() {
     const ec = echarts as any
+    const router = useRouter()
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive(new InitData())
@@ -156,7 +177,9 @@ export default defineComponent({
         data.websiteData = arr
       })
 
-      getBackNoticeList().then((res: any) => {
+      getBackNoticeList({
+        offset: 1
+      }).then((res: any) => {
         if (res.data.status) {
           return proxy.$msg({
             title: '错误',
@@ -167,7 +190,9 @@ export default defineComponent({
         data.backNotice = res.data.data
       })
 
-      getReceNoticeList().then((res: any) => {
+      getReceNoticeList({
+        offset: 1
+      }).then((res: any) => {
         if (res.data.status) {
           return proxy.$msg({
             title: '错误',
@@ -202,7 +227,14 @@ export default defineComponent({
     }
     getData()
 
+    const itemClick = (e: {index: number, type: string}) => {
+      data.tmpData = e.type == '1' ? data.backNotice[e.index] : data.receNotice[e.index]
+      data.drawer = true
+    }
+
     return {
+      router,
+      itemClick,
       MoreFilled,
       Promotion,
       proxy,
@@ -237,6 +269,11 @@ export default defineComponent({
       .titleLeft {
         display: flex;
         align-items: center;
+      }
+      .titleRight {
+        .el-icon {
+          cursor: pointer;
+        }
       }
 
       .el-icon {

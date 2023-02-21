@@ -50,7 +50,7 @@ export default defineComponent({
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 10px 0;
+    margin: 15px 0;
     font-size: 14px;
     .pubTime {
       color: #adadad;

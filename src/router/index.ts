@@ -22,6 +22,7 @@ const userInfoView = () => import(/* webpackChunkName:"loginView" */ '@/views/us
 const articles = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/articleList.vue')
 const videos = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/videoList.vue')
 const users = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/userList.vue')
+const noticeList = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeList/noticeList.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -189,6 +190,11 @@ const routes: Array<RouteRecordRaw> = [
           index: '6-2'
         },
         component: videoReport
+      },
+      {
+        path: '/noticeList/:type',
+        name: 'noticeList',
+        component: noticeList
       },
       {
         path: '/userInfo',

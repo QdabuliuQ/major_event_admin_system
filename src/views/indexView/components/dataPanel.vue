@@ -42,6 +42,7 @@ export default defineComponent({
   align-items: center;
   justify-content: space-around;
   .panelItem {
+    color: #40a1fc;
     padding: 10px 30px;
     
     .panelTitle {

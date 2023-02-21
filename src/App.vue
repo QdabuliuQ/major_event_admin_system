@@ -81,4 +81,9 @@ img {
     background-color: #000;
   }
 }
+.noticeDrawerClass {
+  .el-drawer__body {
+    padding: 20px 30px;
+  }
+}
 </style>

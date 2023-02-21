@@ -1,6 +1,6 @@
 <template>
   <div v-if="list.length" class="noticeList">
-    <div v-for="item in list" class="listItem">
+    <div @click="itemClick(index)" v-for="item,index in list" class="listItem">
       <div class="leftInfo">
         {{ item[title] }}
       </div>
@@ -22,14 +22,22 @@ import { Upload } from '@element-plus/icons-vue';
 import { defineComponent, reactive, onMounted, toRefs, getCurrentInstance, ComponentInternalInstance } from 'vue'
 export default defineComponent({
   name: 'noticeList',
-  props: ['list', 'title', 'time', 'is_top'],
-  setup() {
+  emits: ['itemClick'],
+  props: ['list', 'title', 'time', 'is_top', 'type'],
+  setup(props, context) {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive({})
-    onMounted(() => {
-    })
+    
+    const itemClick = (index: number) => {
+      context.emit('itemClick', {
+        index,
+        type: props.type
+      })
+    }
+
     return {
+      itemClick,
       Upload,
       proxy,
       ...toRefs(data),
