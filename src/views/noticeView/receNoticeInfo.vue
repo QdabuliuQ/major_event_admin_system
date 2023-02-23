@@ -11,10 +11,10 @@
           <el-form-item label="公告标题" prop="title">
             <el-input v-model="noticeForm.title" />
           </el-form-item>
-          <el-form-item label="公告置顶">
+          <el-form-item v-if="type == '1'" label="公告置顶">
             <el-switch v-model="noticeForm.is_top" />
           </el-form-item>
-          <el-form-item label="公告状态">
+          <el-form-item v-if="type == '1'" label="公告状态">
             <el-radio-group v-model="noticeForm.status">
               <el-radio label="1">正常</el-radio>
               <el-radio label="2">禁用</el-radio>
@@ -71,6 +71,7 @@ export default defineComponent({
     const fromContainerRef = ref()
     const noticeInfoFormRef: any = ref<FormInstance>()
     const data = reactive(new InitData())
+    const type = sessionStorage.getItem('type')
 
     const updateSuccess = (msg: string) => {
       proxy.$msg({
@@ -235,6 +236,7 @@ export default defineComponent({
     })
 
     return {
+      type,
       pubNotice,
       handleCreated,
       noticeInfoFormRef,

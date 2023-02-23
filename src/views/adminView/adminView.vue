@@ -1,6 +1,11 @@
 <template>
   <div id="adminView">
-    <div class="topNav">大事件后台管理系统</div>
+    <div class="topNav">
+      大事件后台管理系统
+      <span @click="loginOutEvent" class="loginOut"><el-icon>
+          <Back />
+        </el-icon>退出登录</span>
+    </div>
     <div class="bottomContainer">
       <div class="leftMenu">
         <el-scrollbar class="menuScrollContainer" :height="height + 'px'">
@@ -14,7 +19,7 @@
               </el-icon>
               <span>后台首页</span>
             </el-menu-item>
-            <el-sub-menu v-for="item in menuList" :index="item.index">
+            <el-sub-menu v-for="item in list" :index="item.index">
               <template #title>
                 <component v-if="item.icon" :is="item.icon"></component>
                 <span>{{ item.name }}</span>
@@ -45,8 +50,8 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, onMounted, onUnmounted, toRefs, watch } from "vue";
-import { Menu, House } from '@element-plus/icons-vue'
+import { defineComponent, reactive, onMounted, onUnmounted, toRefs, watch, ComponentInternalInstance, getCurrentInstance, computed } from "vue";
+import { Menu, House, Back } from '@element-plus/icons-vue'
 import { InitData } from "@/types/adminView/adminView";
 import { useRouter, useRoute } from "vue-router";
 
@@ -55,6 +60,8 @@ let timer: any = null;
 export default defineComponent({
   name: "adminView",
   setup() {
+    const { appContext } = getCurrentInstance() as ComponentInternalInstance;
+    const proxy = appContext.config.globalProperties;
     const route = useRoute()
     const router = useRouter()
     const data: InitData = reactive(new InitData());
@@ -66,6 +73,39 @@ export default defineComponent({
         data.height = document.documentElement.clientHeight - document.getElementsByClassName('topNav')[0].clientHeight
       }, 200);
     }
+
+    const loginOutEvent = () => {
+      // 删除 token
+      sessionStorage.removeItem('token')
+      sessionStorage.removeItem('type')
+      proxy.$msg({
+        title: '成功',
+        message: '以退出登录状态',
+        type: 'success'
+      })
+      // 跳转到登录页面
+      router.replace('/')
+      // 清空记录
+      window.localStorage.clear();
+    }
+
+    let list = computed(() => {
+      let type = sessionStorage.getItem('type') as string
+      if(type == '1') return data.menuList
+      else {
+        let menu = data.menuList
+        for(let item of menu) {
+          for(let i = 0; i < item.list.length; i ++) {
+            if(item.list[i].root) {
+              item.list.splice(i, 1)
+            }
+          }
+        }
+        console.log(menu);
+        
+        return menu
+      }
+    })
 
     watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
       data.path = newValue
@@ -83,6 +123,8 @@ export default defineComponent({
     })
 
     return {
+      list,
+      loginOutEvent,
       House,
       Menu,
       router,
@@ -129,6 +171,21 @@ export default defineComponent({
     top: 0;
     left: 0;
     right: 0;
+    .loginOut {
+      position: absolute;
+      font-size: 13px;
+      cursor: pointer;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      .el-icon {
+        font-size: 16px;
+        margin-right: 5px;
+      }
+    }
   }
 
   .bottomContainer {

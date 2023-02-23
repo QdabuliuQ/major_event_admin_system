@@ -1,6 +1,18 @@
 <template>
   <div id="receNotice">
-    <toolBar @resetInfo="resetInfo" @searchInfo="searchInfo" type="rece" />
+    <div class="noticeTopNav">
+      <searchForm 
+        @search-info="getData()"
+        @reset-info="getData()"
+        ref="searchFormRef"
+        :form="form"
+      />
+      <div class="btnContainer">
+        <el-button @click="router.push('/addReceNotice')" type="primary">添加公告</el-button>
+      </div>
+    </div>
+    
+    <!-- <toolBar @resetInfo="resetInfo" @searchInfo="searchInfo" type="rece" /> -->
 
     <el-table :data="noticeData" style="width: 100%">
       <el-table-column prop="id" label="公告ID" width="140" />
@@ -80,10 +92,10 @@
       </el-table-column>
       <el-table-column label="操作" width="300">
         <template #default="scope">
-          <el-button @click="noticeInfo(scope.$index)" type="primary">查看公告</el-button>
-          <el-button :disabled="scope.row.app_status == '3'" @click="router.push('/updateReceNotice?id=' + scope.row.id)" type="warning">编辑公告</el-button>
-          <el-dropdown style="margin-left: 12px">
-            <el-button :disabled="scope.row.app_status != '1'" type="success">
+          <el-button size="small" @click="noticeInfo(scope.$index)" type="primary">查看公告</el-button>
+          <el-button v-if="scope.row.isMe" :disabled="scope.row.app_status != '1'" size="small" @click="router.push('/updateReceNotice?id=' + scope.row.id)" type="warning">编辑公告</el-button>
+          <el-dropdown v-if="type == '1'" style="margin-left: 12px">
+            <el-button size="small" :disabled="scope.row.app_status != '1'" type="success">
               审核<el-icon class="el-icon--right"><arrow-down /></el-icon>
             </el-button>
             <template #dropdown>
@@ -113,42 +125,50 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, getCurrentInstance, ComponentInternalInstance, toRefs } from 'vue'
+import { defineComponent, reactive, getCurrentInstance, ComponentInternalInstance, toRefs, ref, onMounted } from 'vue'
 import { useRouter } from "vue-router";
 import { InitData } from "@/types/noticeView/receNotice";
-import toolBar from "./conponent/toolBar.vue";
 import { getReceNotice } from "@/network/receNotice";
 import { updateStatus } from "@/network/receNotice";
 import noticeContent from "@/components/noticeContent.vue";
+import toolBar from "./conponent/toolBar.vue";
+import searchForm from "@/components/searchForm.vue";
+
 
 export default defineComponent({
   name: 'receNotice',
   components: {
     noticeContent,
-    toolBar
+    toolBar,
+    searchForm
   },
   setup() {
+    const searchFormRef = ref()
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const router = useRouter()
     const data = reactive(new InitData())
+    const type = sessionStorage.getItem('type')
 
-    const getData = (startTime?: BigInt, endTime?: BigInt, is_top?: number, status?: string, val?: string, app_status?: string) => {
+    const getData = () => {
+      let form = searchFormRef.value.getValue()
+      console.log(form);
+      
       getReceNotice({
         offset: data.offset,
-        startTime,
-        endTime,
-        is_top,
-        status,
-        val,
-        app_status
+        startTime: form.time.value.length ? form.time.value[0] : null,
+        endTime: form.time.value.length ? form.time.value[1] : null,
+        is_top: form.is_top.value,
+        status: form.status.value,
+        val: form.val.value,
+        app_status: form.app_status.value
       }).then((res => {
         data.noticeData = res.data.data
         data.total = res.data.count
         data.pageSize = res.data.pageSize
       }))
     }
-    getData()
+    
 
     // 查看公告内容
     const noticeInfo = (i: number) => {
@@ -158,31 +178,6 @@ export default defineComponent({
 
     const pageChange = (e: number) => {
       data.offset = e
-      getData()
-    }
-
-    // 搜索信息
-    const searchInfo = (d: any) => {
-      data.offset = 1
-      data.startTime = d.startTime
-      data.endTime = d.endTime
-      data.is_top = d.is_top
-      data.status = d.status
-      data.val = d.val
-      data.app_status = d.app_status
-      getData(d.startTime, d.endTime, d.is_top, d.status, d.val, d.app_status)
-    }
-
-    // 重置信息
-    const resetInfo = () => {
-      data.offset = 1
-      data.time = 0
-      data.startTime = 9007199254740991n
-      data.endTime = 9007199254740991n
-      data.is_top = -1
-      data.status = '0'
-      data.val = ''
-      data.app_status = '0'
       getData()
     }
 
@@ -209,9 +204,14 @@ export default defineComponent({
       })
     }
 
+    onMounted(() => {
+      getData()
+    })
+
     return {
-      resetInfo,
-      searchInfo,
+      getData,
+      searchFormRef,
+      type,
       updateNoticeStatus,
       pageChange,
       noticeInfo,
@@ -224,5 +224,14 @@ export default defineComponent({
 </script>
 
 <style lang='less'>
-#receNotice {}
+#receNotice {
+  .noticeTopNav {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    .btnContainer {
+      margin-bottom: 10px;
+    }
+  }
+}
 </style>

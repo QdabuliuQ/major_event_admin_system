@@ -1,13 +1,34 @@
 import axios from "axios";
 import { ElNotification } from 'element-plus'
+import glovar from "@/static/globalVar";
+
+export const getToken = (): string => {
+  return sessionStorage.getItem('token') ?? ''
+}
 
 const $http = axios.create({
-  baseURL: 'http://127.0.0.1:8080/admin',
+  baseURL: glovar.url + '/admin',
   headers: { 
     'content-type': 'application/x-www-form-urlencoded',
-    'Authorization': localStorage.getItem('token') ?? '' 
+    // 'Authorization': getToken() 
   },
   timeout: 5000,
+})
+
+// 请求拦截器
+$http.interceptors.request.use(function (config: any) {
+  // 发送请求的相关逻辑
+  // config:对象  与 axios.defaults 相当
+  // 借助config配置token
+  let token = getToken()
+  // 判断token存在再做配置
+  if (token) {
+    config.headers.Authorization = token
+  }
+  return config
+}, function (error) {
+  // Do something with request error
+  return Promise.reject(error)
 })
 
 // 响应拦截器
@@ -18,7 +39,8 @@ $http.interceptors.response.use((req: any): any => {
       message: req.data.msg,
       type: 'error',
     })
-    let backlen=history.length-1;
+    let path = window.location.href
+    window.location.href = path.substr(0, path.lastIndexOf('/')+1)
   } else {
     return req
   }

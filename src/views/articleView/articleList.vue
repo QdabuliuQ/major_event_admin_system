@@ -113,7 +113,7 @@ export default defineComponent({
         cate_id: form.category.value,
         state: form.state.value,
         startTime: form.time.value.length ? form.time.value[0] : null,
-        endTime: form.time.value.length ? form.time.value[0] : null,
+        endTime: form.time.value.length ? form.time.value[1] : null,
         val: form.val.value
       }).then(res => {
         data.listData = res.data.data

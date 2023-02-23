@@ -10,6 +10,7 @@ export class InitData {
       name: string,
       index: string,
       path: string
+      root?: boolean
     }[]
   }[] = [
     {
@@ -26,6 +27,7 @@ export class InitData {
           name: "普通管理员",
           index: "1-2",
           path: "/administrator",
+          root: true
         },
       ],
     },
@@ -60,6 +62,7 @@ export class InitData {
           name: "超级管理员日志",
           index: "3-1",
           path: "/supAdminLog",
+          root: true
         },
         {
           name: "管理员日志",
@@ -77,6 +80,7 @@ export class InitData {
           name: "后台公告",
           index: "4-1",
           path: "/BackNotice",
+          root: true
         },
         {
           name: "前台公告",

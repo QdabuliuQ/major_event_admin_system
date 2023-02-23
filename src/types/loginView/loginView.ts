@@ -1,4 +1,8 @@
 export class InitData {
-  phone: string = ''
+  account: string = '' 
   password: string = ''
-} 
+  c: string = ''
+  svg: string = ''
+  code: string = ''
+  type: number = 1
+}   

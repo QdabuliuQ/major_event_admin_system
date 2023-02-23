@@ -1,6 +1,11 @@
 <template>
   <div id="managerView">
-    <searchForm ref="searchFormRef" @search-info="getAdmin()" @reset-info="getAdmin()" :form="form"  />
+    <div class="managerTopNav">
+      <searchForm ref="searchFormRef" @search-info="getAdmin()" @reset-info="getAdmin()" :form="form"  />
+      <el-button style="margin-bottom: 10px" :icon="Plus" size="small" @click="addAdmin" type="primary"
+        >添加管理员</el-button
+      >
+    </div>
     <el-table :data="adminData" style="width: 100%">
       <el-table-column prop="admin_id" label="ID" width="180" />
       <el-table-column prop="name" label="用户姓名" width="180" />
@@ -118,7 +123,6 @@
       </template>
     </el-dialog>
     <!-- 修改密码 -->
-    <!--  -->
     <el-dialog
       :top="'10vh'"
       v-model="visiblePwdDia"
@@ -162,7 +166,7 @@ import {
   onMounted
 } from "vue";
 import type { FormInstance } from "element-plus";
-import { Edit } from '@element-plus/icons-vue'
+import { Edit, Plus } from '@element-plus/icons-vue'
 import { getAdminList, addAdminInfo, updateAdminInfo, updateAdminPwd } from "@/network/managerView";
 import { InitData } from "@/types/manageView/managerView";
 import searchForm from "@/components/searchForm.vue";
@@ -350,6 +354,7 @@ export default defineComponent({
     return {
       searchFormRef,
       getAdmin,
+      Plus,
       Edit,
       addAdmin,
       submitAdminInfo,
@@ -371,5 +376,10 @@ export default defineComponent({
 
 <style lang='less'>
 #managerView {
+  .managerTopNav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 </style>

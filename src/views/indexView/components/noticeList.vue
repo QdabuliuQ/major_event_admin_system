@@ -1,13 +1,13 @@
 <template>
   <div v-if="list.length" class="noticeList">
-    <div @click="itemClick(index)" v-for="item,index in list" class="listItem">
+    <div @click="itemClick(index)" v-for="item, index in list" class="listItem">
       <div class="leftInfo">
         {{ item[title] }}
       </div>
       <div class="rightInfo">
         <el-icon v-if="item[is_top] == '1'" size="15" color="#499afc">
-        <Upload />
-      </el-icon>
+          <Upload />
+        </el-icon>
         {{ proxy.$moment(item[time]).fromNow() }}
       </div>
     </div>
@@ -28,7 +28,7 @@ export default defineComponent({
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive({})
-    
+
     const itemClick = (index: number) => {
       context.emit('itemClick', {
         index,
@@ -98,4 +98,5 @@ export default defineComponent({
   padding: 130px 0;
   color: #a6a6a6;
   text-align: center;
-}</style>
+}
+</style>

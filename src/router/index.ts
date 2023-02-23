@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
+import { ElNotification } from 'element-plus'
 const loginView = () => import(/* webpackChunkName:"loginView" */ '@/views/loginView/loginView.vue')
 const adminView = () => import(/* webpackChunkName:"loginView" */ '@/views/adminView/adminView.vue')
 const indexView = () => import(/* webpackChunkName:"loginView" */ '@/views/indexView/indexView.vue')
@@ -28,6 +29,9 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'loginView',
+    meta: {
+      login: false
+    },
     component: loginView
   },
   {
@@ -59,7 +63,8 @@ const routes: Array<RouteRecordRaw> = [
         path: '/administrator',
         name: 'administrator',
         meta: {
-          index: '1-2'
+          index: '1-2',
+          root: true
         },
         component: managerView
       },
@@ -91,7 +96,8 @@ const routes: Array<RouteRecordRaw> = [
         path: '/supAdminLog',
         name: 'supAdminLog',
         meta: {
-          index: '3-1'
+          index: '3-1',
+          root: true
         },
         component: supAdminLog
       },
@@ -107,7 +113,8 @@ const routes: Array<RouteRecordRaw> = [
         path: '/backNotice',
         name: 'backNotice',
         meta: {
-          index: '4-1'
+          index: '4-1',
+          root: true
         },
         component: backNotice
       },
@@ -260,5 +267,35 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  console.log(to, from);
+  if (to.meta.login == false) {
+    // 登录或者注册才可以往下进行
+    next();
+  } else {
+    // 获取 token
+    const token = sessionStorage.getItem('token');
+    // token 不存在
+    if (token === null || token === '') {
+      ElNotification({
+        title: '错误',
+        message: '登录失效，请重新登录',
+        type: 'error',
+      })
+      next('/');
+    } else {
+      if(to.meta.root && sessionStorage.getItem('type') == '2') {
+        ElNotification({
+          title: '错误',
+          message: '暂无相关权限',
+          type: 'error',
+        })
+      } else {
+        next();
+      }
+    }
+  }
+});
 
 export default router
