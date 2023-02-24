@@ -12,7 +12,7 @@
         <input v-model="password" placeholder="输入密码" type="text">
       </div>
       <div class="container_input code_input">
-        <input v-model="c" placeholder="输入密码" type="text">
+        <input v-model="c" placeholder="输入验证码" type="text">
         <div @click="toggleCode" class="svgCode" v-html="svg"></div>
       </div>
       <div class="container_select">

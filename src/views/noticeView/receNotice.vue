@@ -131,15 +131,12 @@ import { InitData } from "@/types/noticeView/receNotice";
 import { getReceNotice } from "@/network/receNotice";
 import { updateStatus } from "@/network/receNotice";
 import noticeContent from "@/components/noticeContent.vue";
-import toolBar from "./conponent/toolBar.vue";
 import searchForm from "@/components/searchForm.vue";
-
 
 export default defineComponent({
   name: 'receNotice',
   components: {
     noticeContent,
-    toolBar,
     searchForm
   },
   setup() {
@@ -152,7 +149,6 @@ export default defineComponent({
 
     const getData = () => {
       let form = searchFormRef.value.getValue()
-      console.log(form);
       
       getReceNotice({
         offset: data.offset,
