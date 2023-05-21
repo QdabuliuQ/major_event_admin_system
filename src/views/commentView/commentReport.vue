@@ -7,7 +7,6 @@
       </div>
     </div>
     <el-table :data="reportData" style="width: 100%">
-      <el-table-column prop="id" label="ID" />
       <el-table-column label="评论内容">
         <template #default="scope">
           <div class="commentContent">
@@ -19,7 +18,8 @@
         <template #default="scope">
           <div class="commentContent">
             <el-tag v-if="scope.row.type == '1'">文章</el-tag>
-            <el-tag v-else class="ml-2" type="success">视频</el-tag>
+            <el-tag v-else-if="scope.row.type == '2'" class="ml-2" type="success">视频</el-tag>
+            <el-tag v-else class="ml-2" type="warning">动态</el-tag>
           </div>
         </template>
       </el-table-column>
@@ -38,21 +38,15 @@
       </el-table-column>
       <el-table-column prop="reason" label="提交用户">
         <template #default="scope">
-          <div style="display:flex;align-items:center">
-            <el-avatar :src="scope.row.re_user_pic" />
-            <div class="tableUserInfo">
-              <div class="userNickname">{{ scope.row.re_nickname }}</div>
-              <div class="userId">{{ scope.row.user_id }}</div>
-            </div>
-          </div>
+          <userInfo :user_pic="scope.row.re_user_pic" :nickname="scope.row.re_nickname" :user_id="scope.row.user_id" />
         </template>
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
           <el-button :icon="Close" size="small" :disabled="scope.row.state != '1'" type="danger"
-            @click="updateState('2', scope.row.id)">封禁</el-button>
+            @click="updateState(scope.row.record_id, '2', scope.row.comment_id, scope.row.user_id, scope.row.type)">封禁</el-button>
           <el-button :icon="Check" size="small" :disabled="scope.row.state != '1'" type="success"
-            @click="updateState('3', scope.row.id)">正常</el-button>
+            @click="updateState(scope.row.record_id, '3', scope.row.comment_id, scope.row.user_id, scope.row.type)">正常</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -92,12 +86,14 @@ import { InitData } from "@/types/commentView/commentReport.";
 import { deleteReportReason, addReportReason, getReportReason } from "@/network/articleReport";
 import { getCommentReportList, updateCommentReportState } from "@/network/commentReport";
 import searchForm from "@/components/searchForm.vue";
+import userInfo from "@/components/userInfo.vue";
 
 export default defineComponent({
   name: 'commentReport',
   components: {
     scrollDialog,
-    searchForm
+    searchForm,
+    userInfo
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
@@ -136,10 +132,13 @@ export default defineComponent({
       getData()
     }
 
-    const updateState = (state: string, id: string) => {
+    const updateState = (record_id: string, state: string, comment_id: string, user_id: string, type: string) => {
       updateCommentReportState({
+        record_id,
         state,
-        id
+        comment_id,
+        user_id,
+        type
       }).then((res: any) => {
         if(res.data.status) {
           return proxy.$msg({
@@ -332,15 +331,6 @@ export default defineComponent({
     white-space: nowrap;
     color: #1da0e1;
     cursor: pointer;
-  }
-
-  .tableUserInfo {
-    margin-left: 5px;
-    font-size: 13px;
-
-    .userId {
-      color: #b1b1b1;
-    }
   }
 }
 </style>

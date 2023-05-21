@@ -1,7 +1,7 @@
 <template>
   <div id="adminView">
     <div class="topNav">
-      大事件后台管理系统
+      后台管理系统
       <span @click="loginOutEvent" class="loginOut"><el-icon>
           <Back />
         </el-icon>退出登录</span>
@@ -247,7 +247,6 @@ export default defineComponent({
 
     .rightRouterView {
       width: calc(100% - 200px);
-
       ._routerContainer {
         margin: 20px;
       }

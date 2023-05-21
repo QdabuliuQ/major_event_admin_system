@@ -1,6 +1,6 @@
 <template>
   <div @click="toDetail" class="userInfoItem">
-    <el-avatar :src="user_pic" />
+    <el-avatar fit="cover" :src="user_pic" />
     <div class="userData">
       <div class="userName">
         {{ nickname }}
@@ -13,7 +13,7 @@
 </template>
 
 <script lang='ts'>
-import { defineComponent, reactive, toRefs } from 'vue'
+import { defineComponent } from 'vue'
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -38,6 +38,11 @@ export default defineComponent({
   display: flex;
   align-items: center;
   cursor: pointer;
+  .el-avatar {
+    img {
+      width: 100%;
+    }
+  }
   .userData {
     width: 50%;
     font-size: 13px;

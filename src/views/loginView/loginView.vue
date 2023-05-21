@@ -108,10 +108,7 @@ export default defineComponent({
             sessionStorage.setItem("type", res.data.type)
             
             setTimeout(() => {
-              console.log('登录', sessionStorage.getItem("token"));
-              
               router.push('/admin' )
-              
             }, 300);
           }
         });

@@ -64,11 +64,6 @@ export class InitData {
           path: "/supAdminLog",
           root: true
         },
-        {
-          name: "管理员日志",
-          index: "3-2",
-          path: "/adminLog",
-        },
       ],
     },
     {

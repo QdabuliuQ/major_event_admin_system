@@ -21,15 +21,9 @@ export class InitData {
   pageSize: number = 0
   total: number = 0
   comments: IntComment[] = []
-  flootComments: any = null
   articleDrawer: boolean = false
-  itemPageSize: number = 10
-
-  replyDrawer: boolean = false
 
   idx: number = 0
-  replyIdx: number = 0
-
   articleList: any[] = []
 
   form: SearchFormInt[] = [

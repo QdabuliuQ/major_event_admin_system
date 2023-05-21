@@ -1,29 +1,28 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { ElNotification } from 'element-plus'
 const loginView = () => import(/* webpackChunkName:"loginView" */ '@/views/loginView/loginView.vue')
-const adminView = () => import(/* webpackChunkName:"loginView" */ '@/views/adminView/adminView.vue')
-const indexView = () => import(/* webpackChunkName:"loginView" */ '@/views/indexView/indexView.vue')
-const clientView = () => import(/* webpackChunkName:"loginView" */ '@/views/clientView/clientView.vue')
-const managerView = () => import(/* webpackChunkName:"loginView" */ '@/views/managerView/managerView.vue')
-const supAdminLog = () => import(/* webpackChunkName:"loginView" */ '@/views/logView/supAdminLog.vue')
-const adminLog = () => import(/* webpackChunkName:"loginView" */ '@/views/logView/adminLog.vue')
-const backNotice = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/backNotice.vue')
-const receNotice = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/receNotice.vue')
-const backNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/backNoticeInfo.vue')
-const receNoticeInfo = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeView/receNoticeInfo.vue')
-const articleCate = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleCate.vue')
-const articleList = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleList.vue')
-const articleReport = () => import(/* webpackChunkName:"loginView" */ '@/views/articleView/articleReport.vue')
-const commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentList.vue')
-const v_commentList = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/v_commentList.vue')
-const commentReport = () => import(/* webpackChunkName:"loginView" */ '@/views/commentView/commentReport.vue')
-const videoView = () => import(/* webpackChunkName:"loginView" */ '@/views/videoView/videoView.vue')
-const videoReport = () => import(/* webpackChunkName:"loginView" */ '@/views/videoView/videoReport.vue')
-const userInfoView = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/userInfoView.vue')
-const articles = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/articleList.vue')
-const videos = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/videoList.vue')
-const users = () => import(/* webpackChunkName:"loginView" */ '@/views/userInfoView/userList.vue')
-const noticeList = () => import(/* webpackChunkName:"loginView" */ '@/views/noticeList/noticeList.vue')
+const adminView = () => import(/* webpackChunkName:"adminView" */ '@/views/adminView/adminView.vue')
+const indexView = () => import(/* webpackChunkName:"indexView" */ '@/views/indexView/indexView.vue')
+const clientView = () => import(/* webpackChunkName:"userView" */ '@/views/clientView/clientView.vue')
+const managerView = () => import(/* webpackChunkName:"userView" */ '@/views/managerView/managerView.vue')
+const supAdminLog = () => import(/* webpackChunkName:"logView" */ '@/views/logView/supAdminLog.vue')
+const backNotice = () => import(/* webpackChunkName:"noticeView" */ '@/views/noticeView/backNotice.vue')
+const receNotice = () => import(/* webpackChunkName:"noticeView" */ '@/views/noticeView/receNotice.vue')
+const backNoticeInfo = () => import(/* webpackChunkName:"noticeView" */ '@/views/noticeView/backNoticeInfo.vue')
+const receNoticeInfo = () => import(/* webpackChunkName:"noticeView" */ '@/views/noticeView/receNoticeInfo.vue')
+const articleCate = () => import(/* webpackChunkName:"articleView" */ '@/views/articleView/articleCate.vue')
+const articleList = () => import(/* webpackChunkName:"articleView" */ '@/views/articleView/articleList.vue')
+const articleReport = () => import(/* webpackChunkName:"articleView" */ '@/views/articleView/articleReport.vue')
+const commentList = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/commentList.vue')
+const v_commentList = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/v_commentList.vue')
+const commentReport = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/commentReport.vue')
+const videoView = () => import(/* webpackChunkName:"videoView" */ '@/views/videoView/videoView.vue')
+const videoReport = () => import(/* webpackChunkName:"videoView" */ '@/views/videoView/videoReport.vue')
+const userInfoView = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/userInfoView.vue')
+const articles = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/articleList.vue')
+const videos = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/videoList.vue')
+const users = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/userList.vue')
+const noticeList = () => import(/* webpackChunkName:"indexView" */ '@/views/noticeList/noticeList.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -100,14 +99,6 @@ const routes: Array<RouteRecordRaw> = [
           root: true
         },
         component: supAdminLog
-      },
-      {
-        path: '/adminLog',
-        name: 'adminLog',
-        meta: {
-          index: '3-2'
-        },
-        component: adminLog
       },
       {
         path: '/backNotice',
@@ -270,12 +261,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   console.log(to, from);
+  const token = sessionStorage.getItem('token');
   if (to.meta.login == false) {
     // 登录或者注册才可以往下进行
-    next();
+    if (token) {
+      next('/admin');
+    } else {
+      next();
+    }
   } else {
-    // 获取 token
-    const token = sessionStorage.getItem('token');
     // token 不存在
     if (token === null || token === '') {
       ElNotification({
@@ -285,6 +279,7 @@ router.beforeEach((to, from, next) => {
       })
       next('/');
     } else {
+      console.log(222);
       if(to.meta.root && sessionStorage.getItem('type') == '2') {
         ElNotification({
           title: '错误',

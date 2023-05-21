@@ -42,8 +42,16 @@ export class InitData {
           value: '1'
         },
         {
+          label: '文章',
+          value: '1'
+        },
+        {
           label: '视频',
           value: '2'
+        },
+        {
+          label: '动态',
+          value: '3'
         },
       ],
       width: 150,

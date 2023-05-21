@@ -17,8 +17,11 @@ export function getCommentReportList(data: {
 }
 
 export function updateCommentReportState(data: {
-  id: string
+  record_id: string
+  comment_id: string
   state: string
+  user_id: string
+  type: string
 }) {
   return $http({
     url: '/rep/updateCommentReportState',
