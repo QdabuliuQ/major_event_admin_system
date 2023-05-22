@@ -15,6 +15,7 @@ const articleList = () => import(/* webpackChunkName:"articleView" */ '@/views/a
 const articleReport = () => import(/* webpackChunkName:"articleView" */ '@/views/articleView/articleReport.vue')
 const commentList = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/commentList.vue')
 const v_commentList = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/v_commentList.vue')
+const e_commentList = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/e_commentList.vue')
 const commentReport = () => import(/* webpackChunkName:"commentView" */ '@/views/commentView/commentReport.vue')
 const videoView = () => import(/* webpackChunkName:"videoView" */ '@/views/videoView/videoView.vue')
 const videoReport = () => import(/* webpackChunkName:"videoView" */ '@/views/videoView/videoReport.vue')
@@ -23,6 +24,7 @@ const articles = () => import(/* webpackChunkName:"infoView" */ '@/views/userInf
 const videos = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/videoList.vue')
 const users = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/userList.vue')
 const noticeList = () => import(/* webpackChunkName:"indexView" */ '@/views/noticeList/noticeList.vue')
+const eventView = () => import(/* webpackChunkName:"indexView" */ '@/views/eventView/eventView.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -166,10 +168,18 @@ const routes: Array<RouteRecordRaw> = [
         component: v_commentList
       },
       {
+        path: '/e_commentList',
+        name: 'e_commentList',
+        meta: {
+          index: '5-3'
+        },
+        component: e_commentList
+      },
+      {
         path: '/commentReport',
         name: 'commentReport',
         meta: {
-          index: '5-3'
+          index: '5-4'
         },
         component: commentReport
       },
@@ -188,6 +198,14 @@ const routes: Array<RouteRecordRaw> = [
           index: '6-2'
         },
         component: videoReport
+      },
+      {
+        path: '/eventView',
+        name: 'eventView',
+        meta: {
+          index: '7-1'
+        },
+        component: eventView
       },
       {
         path: '/noticeList/:type',

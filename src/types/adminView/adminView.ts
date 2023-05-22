@@ -100,8 +100,13 @@ export class InitData {
           path: "/v_commentList",
         },
         {
-          name: "评论举报",
+          name: "动态评论",
           index: "5-3",
+          path: "/e_commentList",
+        },
+        {
+          name: "评论举报",
+          index: "5-4",
           path: "/commentReport",
         },
       ],
@@ -119,6 +124,23 @@ export class InitData {
         {
           name: "视频举报",
           index: "6-2",
+          path: "/videoReport",
+        },
+      ],
+    },
+    {
+      name: "动态管理",
+      index: "7",
+      icon: "Message",
+      list: [
+        {
+          name: "动态列表",
+          index: "7-1",
+          path: "/eventView",
+        },
+        {
+          name: "动态举报",
+          index: "7-2",
           path: "/videoReport",
         },
       ],

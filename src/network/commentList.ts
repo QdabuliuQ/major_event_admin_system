@@ -49,3 +49,29 @@ export function getCommentFloor(data: {
     params: data
   })
 }
+
+// 获取动态评论
+export function getEventCommentList(data: {
+  offset: number
+  val?: string
+  is_delete?: number
+  startTime?: number
+  endTime?: number
+}) {
+  return $http({
+    url: '/com/getEventCommentList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 删除动态评论
+export function deleteEventComment(data: {
+  comment_id: string
+}) {
+  return $http({
+    url: '/com/deleteEventComment',
+    method: 'post',
+    data
+  })
+}

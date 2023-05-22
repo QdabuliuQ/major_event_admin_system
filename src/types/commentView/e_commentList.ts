@@ -1,31 +1,11 @@
-import { SearchFormInt } from "../articleView/articleList";
-
-export interface IntComment {
-  art_id?: string
-  video_id?: string
-  event_id?: string
-  comment_id: string
-  content: string
-  is_delete: number
-  nickname: string
-  parent_id: string
-  praise: number
-  reply: number
-  time: number
-  user_id: string
-  user_pic: string
-}
+import { SearchFormInt } from "../articleView/articleList"
+import { IntComment } from "./commentList"
 
 export class InitData {
   offset: number = 1
-
-  pageSize: number = 0
   total: number = 0
+  pageSize: number = 0
   comments: IntComment[] = []
-  articleDrawer: boolean = false
-
-  idx: number = 0
-  articleList: any[] = []
 
   form: SearchFormInt[] = [
     {
@@ -55,4 +35,4 @@ export class InitData {
       placeholder: '请输入搜索内容'
     },
   ]
-} 
+}
