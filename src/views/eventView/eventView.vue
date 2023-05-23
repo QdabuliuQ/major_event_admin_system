@@ -1,6 +1,7 @@
 <template>
   <div id="eventView">
-    <searchForm style="width: 1100px;" @search-info="getData()" @reset-info="getData()" ref="searchFormRef" :form="form" />
+    <searchForm style="width: 1100px;" @search-info="getData()" @reset-info="getData()" ref="searchFormRef"
+      :form="form" />
     <el-table :data="events" style="width: 100%">
       <el-table-column prop="ev_id" label="动态ID" width="250" />
       <el-table-column prop="praise_count" label="点赞数" width="80" />
@@ -32,8 +33,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button :icon="Tickets" @click="getEvent(scope.$index)" size="small"
-            type="primary">查看动态</el-button>
+          <el-button :icon="Tickets" @click="getEvent(scope.$index)" size="small" type="primary">查看动态</el-button>
           <el-button :icon="Close" :disabled="scope.row.state != '1'" @click="banEvent(scope.$index)" size="small"
             type="danger">封禁动态</el-button>
         </template>
@@ -43,30 +43,65 @@
       <el-pagination @current-change="pageChange" :current-page="offset" :page-size="pageSize" background
         layout="prev, pager, next" :total="total" />
     </div>
+    <el-dialog v-model="dialog" width="40%">
+      <eventItem v-if="eventDetail" 
+        :user_id="eventDetail.user_id" 
+        :nickname="eventDetail.nickname" 
+        :images="eventDetail.images" 
+        :type="eventDetail.type"
+        :resource_info="eventDetail.resource_info"
+        :praise_count="eventDetail.praise_count"
+        :commentCount="eventDetail.commentCount"
+        :content="eventDetail.content"
+        :user_pic="eventDetail.user_pic" />
+    </el-dialog>
   </div>
 </template>
 
 <script lang='ts'>
 import { defineComponent, reactive, onMounted, toRefs, getCurrentInstance, ComponentInternalInstance, ref } from 'vue'
 import { Close, Tickets } from '@element-plus/icons-vue'
-import { InitData } from "@/types/eventView/eventView";
-import { getEventList, deleteEvent } from "@/network/eventView";
+import { InitData, IntEvent } from "@/types/eventView/eventView";
+import { getEventList, deleteEvent, getEventDetail } from "@/network/eventView";
 import userInfo from "@/components/userInfo.vue";
 import searchForm from "@/components/searchForm.vue";
+import eventItem from "@/components/eventItem.vue";
 
 export default defineComponent({
   name: 'eventView',
   components: {
     userInfo,
-    searchForm
+    searchForm,
+    eventItem
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
     const proxy = appContext.config.globalProperties;
     const data = reactive(new InitData())
     const searchFormRef = ref()
+    let test = {
+      video_url: "http://127.0.0.1:8000/videos/1675842525502AqatA.mp4",
+    }
     const getEvent = (i: number) => {
-
+      data.dialog = true
+      let id: string = data.events[i].ev_id
+      if(!data.eventMap.has(id)) {
+        getEventDetail({
+          ev_id: id
+        }).then(res => {
+          if (res.data.status) {
+            proxy.$msg({
+              title: '错误',
+              message: res.data.msg,
+              type: 'error'
+            })
+          }
+          data.eventDetail = res.data.data
+          data.eventMap.set(id, res.data.data)
+        })
+      } else {
+        data.eventDetail = data.eventMap.get(id) as IntEvent
+      }
     }
     const banEvent = (i: number) => {
       deleteEvent({
@@ -118,6 +153,7 @@ export default defineComponent({
       getData()
     })
     return {
+      test,
       Tickets,
       Close,
       proxy,
@@ -133,7 +169,5 @@ export default defineComponent({
 </script>
 
 <style lang='less'>
-#eventView {
-
-}
+#eventView {}
 </style>

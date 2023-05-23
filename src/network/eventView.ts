@@ -26,3 +26,14 @@ export function deleteEvent(data: {
     method: 'post'
   })
 }
+
+// 查看动态
+export function getEventDetail(data: {
+  ev_id: string
+}) {
+  return $http({
+    url: '/eve/getEventDetail',
+    params: data,
+    method: 'get'
+  })
+}

@@ -1,13 +1,14 @@
 import { SearchFormInt } from "../articleView/articleList"
 
 export interface IntEvent {
-  comment_count: number
+  commentCount: number
   content: string
   ev_id: string
   images: string
   nickname: string
   praise_count: number
   resource_id: string
+  resource_info: any
   state: string
   time: number
   type: string
@@ -19,9 +20,10 @@ export class InitData {
   total: number = 0
   pageSize: number = 0
   offset: number = 1
-
+  dialog: boolean = false
   events: IntEvent[] = []
-
+  eventDetail: IntEvent | null = null
+  eventMap: Map<string, IntEvent> = new Map()
   form: SearchFormInt[] = [
     {
       type: 'select',
