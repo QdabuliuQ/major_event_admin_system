@@ -1,25 +1,24 @@
-import { SearchFormInt } from "../articleView/articleList";
+import { SearchFormInt } from "../articleView/articleList"
+import { IntEvent } from "./eventView"
+
+interface IntEventReport {
+  ev_id: string
+  nickname: string
+  reason: string
+  state: string
+  time: number
+  user_id: string
+  user_pic: string
+}
 
 export class InitData {
-  reportData: {
-    desc: string
-    id: string
-    nickname: string
-    proof: any
-    reason: string
-    state: string
-    time: number
-    user_id: string
-    user_pic: string
-    video_id: string
-    video_url: string
-  }[] = []
   offset: number = 1
   total: number = 0
   pageSize: number = 0
-  idx: number = -1
-  infoDrawer: boolean = false
-  videoDialog: boolean = false
+  dialog: boolean = false
+  eventMap: Map<string, IntEvent> = new Map()
+  eventDetail: IntEvent | null = null
+  reports: IntEventReport[] = []
 
   form: SearchFormInt[] = [
     {

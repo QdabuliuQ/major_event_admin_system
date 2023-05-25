@@ -25,6 +25,7 @@ const videos = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoV
 const users = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoView/userList.vue')
 const noticeList = () => import(/* webpackChunkName:"indexView" */ '@/views/noticeList/noticeList.vue')
 const eventView = () => import(/* webpackChunkName:"indexView" */ '@/views/eventView/eventView.vue')
+const eventReport = () => import(/* webpackChunkName:"indexView" */ '@/views/eventView/eventReport.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -206,6 +207,14 @@ const routes: Array<RouteRecordRaw> = [
           index: '7-1'
         },
         component: eventView
+      },
+      {
+        path: '/eventReport',
+        name: 'eventReport',
+        meta: {
+          index: '7-2'
+        },
+        component: eventReport
       },
       {
         path: '/noticeList/:type',

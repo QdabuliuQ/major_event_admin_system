@@ -74,13 +74,13 @@ export class InitData {
         {
           name: "后台公告",
           index: "4-1",
-          path: "/BackNotice",
+          path: "/backNotice",
           root: true
         },
         {
           name: "前台公告",
           index: "4-2",
-          path: "/ReceNotice",
+          path: "/receNotice",
         },
       ],
     },
@@ -141,7 +141,7 @@ export class InitData {
         {
           name: "动态举报",
           index: "7-2",
-          path: "/videoReport",
+          path: "/eventReport",
         },
       ],
     },

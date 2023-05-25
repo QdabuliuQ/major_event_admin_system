@@ -93,7 +93,7 @@
       <el-table-column label="操作" width="300">
         <template #default="scope">
           <el-button size="small" @click="noticeInfo(scope.$index)" type="primary">查看公告</el-button>
-          <el-button v-if="scope.row.isMe" :disabled="scope.row.app_status != '1'" size="small" @click="router.push('/updateReceNotice?id=' + scope.row.id)" type="warning">编辑公告</el-button>
+          <el-button v-if="type == '1' && scope.row.app_status != '3'" size="small" @click="router.push('/updateReceNotice?id=' + scope.row.id)" type="warning">编辑公告</el-button>
           <el-dropdown v-if="type == '1'" style="margin-left: 12px">
             <el-button size="small" :disabled="scope.row.app_status != '1'" type="success">
               审核<el-icon class="el-icon--right"><arrow-down /></el-icon>

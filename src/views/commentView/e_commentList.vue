@@ -5,7 +5,7 @@
       <el-table-column prop="comment_id" label="评论ID" width="250" />
       <el-table-column label="动态ID" width="250">
         <template #default="scope">
-          <el-link type="primary">{{ scope.row.ev_id }}</el-link>
+          <el-link @click="getDetail(scope.$index)" type="primary">{{ scope.row.ev_id }}</el-link>
         </template>
       </el-table-column>
 
@@ -42,6 +42,18 @@
       <el-pagination @current-change="pageChange" :current-page="offset" :page-size="pageSize" background
         layout="prev, pager, next" :total="total" />
     </div>
+    <el-dialog v-model="dialog" width="40%">
+      <eventItem v-if="eventDetail" 
+        :user_id="eventDetail.user_id" 
+        :nickname="eventDetail.nickname" 
+        :images="eventDetail.images" 
+        :type="eventDetail.type"
+        :resource_info="eventDetail.resource_info"
+        :praise_count="eventDetail.praise_count"
+        :commentCount="eventDetail.commentCount"
+        :content="eventDetail.content"
+        :user_pic="eventDetail.user_pic" />
+    </el-dialog>
   </div>
 </template>
 
@@ -50,13 +62,17 @@ import { defineComponent, reactive, onMounted, toRefs, ref, getCurrentInstance, 
 import { InitData } from "@/types/commentView/e_commentList";
 import searchForm from "@/components/searchForm.vue";
 import { getEventCommentList, deleteEventComment } from "@/network/commentList";
+import { getEventDetail } from "@/network/eventView"
+import { IntEvent } from '@/types/eventView/eventView';
 import userInfo from "@/components/userInfo.vue";
+import eventItem from "@/components/eventItem.vue";
 
 export default defineComponent({
   name: 'e_commentList',
   components: {
     searchForm,
-    userInfo
+    userInfo,
+    eventItem
   },
   setup() {
     const { appContext } = getCurrentInstance() as ComponentInternalInstance;
@@ -64,6 +80,28 @@ export default defineComponent({
     const data = reactive(new InitData())
     const searchFormRef = ref()
 
+    // 获取动态详情
+    const getDetail = (i: number) => {
+      data.dialog = true
+      let id: string = (data.comments[i] as any).ev_id as string
+      if(!data.eventMap.has(id)) {
+        getEventDetail({
+          ev_id: id
+        }).then(res => {
+          if (res.data.status) {
+            proxy.$msg({
+              title: '错误',
+              message: res.data.msg,
+              type: 'error'
+            })
+          }
+          data.eventDetail = res.data.data
+          data.eventMap.set(id, res.data.data)
+        })
+      } else {
+        data.eventDetail = data.eventMap.get(id) as IntEvent
+      }
+    }
     // 切换页码
     const pageChange = (e: number) => {
       data.offset = e
@@ -115,6 +153,7 @@ export default defineComponent({
       getData()
     })
     return {
+      getDetail,
       proxy,
       searchFormRef,
       pageChange,

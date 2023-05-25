@@ -1,4 +1,5 @@
 import { SearchFormInt } from "../articleView/articleList"
+import { IntEvent } from "../eventView/eventView"
 import { IntComment } from "./commentList"
 
 export class InitData {
@@ -6,7 +7,9 @@ export class InitData {
   total: number = 0
   pageSize: number = 0
   comments: IntComment[] = []
-
+  dialog: boolean = false
+  eventDetail: IntEvent | null = null
+  eventMap: Map<string, IntEvent> = new Map()
   form: SearchFormInt[] = [
     {
       type: 'select',
