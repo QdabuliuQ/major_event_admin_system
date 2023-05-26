@@ -137,11 +137,11 @@ export default defineComponent({
 <style lang='less'>
 #adminView {
   .el-scrollbar__view {
-    .is-active {
-      color: #499afc !important;
-      background-color: #4d4d4d;
-      font-weight: bold;
-    }
+    // .is-active {
+    //   color: #499afc !important;
+    //   background-color: #4d4d4d;
+    //   font-weight: bold;
+    // }
   }
 
   .el-menu-item {

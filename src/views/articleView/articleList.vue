@@ -40,13 +40,6 @@
             :user_pic="scope.row.user_pic"
             :user_id="scope.row.author_id"
           />
-          <!-- <div class="tableUserInfo">
-            <el-avatar :src="scope.row.user_pic" />
-            <div class="userDetail">
-              <div class="userName">{{ scope.row.nickname }}</div>
-              <div class="userId">{{ scope.row.author_id }}</div>
-            </div>
-          </div> -->
         </template>
       </el-table-column>
       <el-table-column label="操作" width="190">

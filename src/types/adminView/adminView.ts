@@ -145,5 +145,22 @@ export class InitData {
         },
       ],
     },
+    {
+      name: "消息管理",
+      index: "8",
+      icon: "ChatLineSquare",
+      list: [
+        {
+          name: "消息列表",
+          index: "8-1",
+          path: "/messageView",
+        },
+        {
+          name: "消息举报",
+          index: "8-2",
+          path: "/messageReport",
+        },
+      ],
+    },
   ]
 }

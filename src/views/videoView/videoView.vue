@@ -72,7 +72,7 @@
         layout="prev, pager, next" :total="total" />
     </div>
   </div>
-  <el-dialog class="videoDialogClass" v-model="videoDialog" title="Tips" width="45%">
+  <el-dialog class="videoDialogClass" v-model="videoDialog" title="视频播放" width="45%">
     <video controls v-show="videoDialog && videoData[activeIndex]" :src="videoData[activeIndex].video_url"></video>
   </el-dialog>
   <el-drawer v-model="drawer" :size="'40%'" :title="drawerType == 'praise' ? '点赞用户' : '收藏用户'" direction="rtl">

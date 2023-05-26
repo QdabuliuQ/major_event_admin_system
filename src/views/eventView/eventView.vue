@@ -88,7 +88,7 @@ export default defineComponent({
           ev_id: id
         }).then(res => {
           if (res.data.status) {
-            proxy.$msg({
+            return proxy.$msg({
               title: '错误',
               message: res.data.msg,
               type: 'error'

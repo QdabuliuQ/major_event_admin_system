@@ -26,6 +26,7 @@ const users = () => import(/* webpackChunkName:"infoView" */ '@/views/userInfoVi
 const noticeList = () => import(/* webpackChunkName:"indexView" */ '@/views/noticeList/noticeList.vue')
 const eventView = () => import(/* webpackChunkName:"indexView" */ '@/views/eventView/eventView.vue')
 const eventReport = () => import(/* webpackChunkName:"indexView" */ '@/views/eventView/eventReport.vue')
+const messageView = () => import(/* webpackChunkName:"indexView" */ '@/views/messageView/messageView.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -215,6 +216,14 @@ const routes: Array<RouteRecordRaw> = [
           index: '7-2'
         },
         component: eventReport
+      },
+      {
+        path: '/messageView',
+        name: 'messageView',
+        meta: {
+          index: '8-1'
+        },
+        component: messageView
       },
       {
         path: '/noticeList/:type',
